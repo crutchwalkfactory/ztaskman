@@ -1,0 +1,49 @@
+[Info]
+LNG = Русский
+AUTHOR = Ant-ON
+VER = 0.4.2
+
+[Strings]
+SHOW = Развернуть
+QUIT = Закрыть
+KILL = Убить
+INFO = Информация
+SETTING = Настройки
+ABOUT = О программе
+EXIT = Выход
+ADD = Добавить
+DEL = Удалить
+REN = Переименовать
+
+OK = ОК
+MENU = Меню
+CANCEL = Отмена
+SEL = Выбор
+
+MINIALL = Свернуть всё
+FLOWPLAYER = Главное меню
+PRIORITY = Приоритет
+
+DLG_ABOUT = zTaskMan
+DLG_SETTING = Настройки
+DLG_PROCINFO = Инф. о задаче
+DLG_ADD = Добавить
+DLG_REN = Введите новое название приложения:
+
+PROCFILTER = Отображать все задачи
+TASKNOWIN = Отображать задачи без окон
+SENDREASEPHONE = Использовать перекрывание окон
+SENDTOIDLE = Использовать сворачивание Java'ы
+LANG = Язык:
+PANELFONTSIZE = Размер шрифта панели:
+LISTFONTSIZE = Размер шрифта списков:
+SHOWINFOGREEN = Информация о задаче по нажатии зеленой кнопки
+KILLC = Убивать задачу по нажатию кнопки C
+TIMEINCAPTION = Время в заголовке окна
+USEUSERCOLOR = Использовать пользовательский цвет шрифта
+COLOR = Цвет шрифта
+
+LOADLIB = Подгруженные библиотеки:
+THREADS = Потоки
+RUNUSER = Запущенно от имени
+

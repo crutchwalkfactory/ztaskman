@@ -1,0 +1,49 @@
+[Info]
+LNG = Turkish
+AUTHOR = Semseddin
+VER= 0.4.2
+
+[Strings]
+SHOW = Degistir
+QUIT = Gorev sonlandir
+KILL = Gorev bitir
+INFO = Bilgi
+SETTING = Ayarlar
+ABOUT = Hakkinda
+EXIT = Cikis
+ADD = App ekle
+DEL = App sil
+REN = Yeniden adlandir
+
+OK = OK
+MENU = Menu
+CANCEL = Iptal
+SEL = Sec
+
+MINIALL = Minimize et
+FLOWPLAYER = Ana menu
+PRIORIT1Y = Oncelik
+
+DLG_ABOUT = zTaskMan
+DLG_SETTING = Ayarlar
+DLG_PROCINFO = Gorev bilgisi
+DLG_ADD = App ekle
+DLG_REN = Yeni isim gir:
+
+PROCFILTER = Tum gorevleri goster
+TASKNOWIN = Penceresiz gorevleri goster
+SENDREASEPHONE = Pencere ustuste kullan
+SENDTOIDLE = Java app'lari minimize et
+LANG = Dil:
+PANELFONTSIZE = Panel font boyutu:
+LISTFONTSIZE = Liste font boyutu:
+SHOWINFOGREEN = Yesil tus'a basarak gorev bilgisini goster
+KILLC = C tusuna basarak gorevi bitir
+TIMEINCAPTION = Saat baslıgında
+USEUSERCOLOR = kullanın ozel bir yazı tipi rengi
+COLOR = Font сolor
+
+LOADLIB = Kullanilan Libs'ler :
+THREADS = Konuları
+RUNUSER = Koşmak adına
+

@@ -1,0 +1,49 @@
+[Info]
+LNG = Spanish
+AUTHOR = Ant-ON (Translation by Chriiss)
+VER= 0.4.2
+
+[Strings]
+SHOW = Cambiar
+QUIT = Finalizar Tareas
+KILL = Matar Tareas
+INFO = Informacion
+SETTING = Configuraciones
+ABOUT = Acerca de...
+EXIT = Salir
+ADD = Agregar app
+DEL = Borrar app
+REN = Renombrar
+
+OK = OK
+MENU = Menu
+CANCEL = Cancelar
+SEL = Seleccionar
+
+MINIALL = Minimizar todo
+FLOWPLAYER = Menu principal
+PRIORITY = Prioridad
+
+DLG_ABOUT = zTaskMan
+DLG_SETTING = Configuraciones
+DLG_PROCINFO = Informacion de tareas
+DLG_ADD = Agregar app
+DLG_REN = Escriba un nuevo nombre:
+
+PROCFILTER = Mostrar todas las tareas
+TASKNOWIN = Mostrar tareas sin ventanas
+SENDREASEPHONE = Utilizar ventanas superpuestas
+SENDTOIDLE = Minimizar app java
+LANG = Lenguaje:
+PANELFONTSIZE = Panel de tamaño de letra:
+LISTFONTSIZE = Tamaño de letra de la lista:
+SHOWINFOGREEN = Mostrar informacion de tareas precionando el boton verde
+KILLC = Matar tareas precionando la tecla C
+TIMEINCAPTION = Tiempo en el titulo
+USEUSERCOLOR = Usar un color de letra personalizada
+COLOR = Color de letra
+
+LOADLIB = Librerias utilizadas:
+THREADS = Temas
+RUNUSER = Uid
+

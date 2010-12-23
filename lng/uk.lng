@@ -1,0 +1,49 @@
+[Info]
+LNG = Українська
+AUTHOR = rec0mp
+VER= 0.4.2
+
+[Strings]
+SHOW = Розгорнути
+QUIT = Закрити
+KILL = Вбити
+INFO = Інформація
+SETTING = Настройки
+ABOUT = Про программу
+EXIT = Вихід
+ADD = Додати
+DEL = Видалити
+REN = Перейменувати
+
+OK = ОК
+MENU = Меню
+CANCEL = Відміна
+SEL = Вибір
+
+MINIALL = Згорнути усе
+FLOWPLAYER = Головне меню
+PRIORITY = Пріоритет
+
+DLG_ABOUT = Про zTaskMan
+DLG_SETTING = Настройки
+DLG_PROCINFO = Інф. про задачу
+DLG_ADD = Додати
+DLG_REN = Введіть нову назву програми:
+
+PROCFILTER = Відображати усі задачі
+TASKNOWIN = Відображати задачі без вікон
+SENDREASEPHONE = Використовувати перекриття вікон
+SENDTOIDLE = Використовувати згортання Java'и
+LANG = Мова:
+PANELFONTSIZE = Розмір шрифту панелі:
+LISTFONTSIZE = Розмір шрифту списків:
+SHOWINFOGREEN = Інформація про завдання по натисканні зеленої кнопки
+KILLC = Вбивати додаток після натискання кнопки C
+TIMEINCAPTION = Час у заголовку вікна
+USEUSERCOLOR = Використовувати користувальницький колір шрифту
+COLOR = Колір шрифту
+
+LOADLIB = Завантажені бібліотеки:
+THREADS = Потоки
+RUNUSER = Запущена від імені
+

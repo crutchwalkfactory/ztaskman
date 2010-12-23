@@ -1,0 +1,49 @@
+[Info]
+LNG = English
+AUTHOR = Ant-ON (translation fix by TEQUILA)
+VER= 0.4.2
+
+[Strings]
+SHOW = Switch
+QUIT = End Task
+KILL = Kill Task
+INFO = Info
+SETTING = Settings
+ABOUT = About
+EXIT = Exit
+ADD = Add app
+DEL = Delete app
+REN = Rename
+
+OK = OK
+MENU = Menu
+CANCEL = Cancel
+SEL = Select
+
+MINIALL = Minimize all
+FLOWPLAYER = Main menu
+PRIORITY = Priority
+
+DLG_ABOUT = zTaskMan
+DLG_SETTING = Settings
+DLG_PROCINFO = Task Info
+DLG_ADD = Add app
+DLG_REN = Enter new name:
+
+PROCFILTER = Show all tasks
+TASKNOWIN = Show tasks without windows
+SENDREASEPHONE = Use windows overlapping
+SENDTOIDLE = Minimize Java apps
+LANG = Language:
+PANELFONTSIZE = Panel font size:
+LISTFONTSIZE = List font size:
+SHOWINFOGREEN = Show task info by pressing the green button
+KILLC = Kill task by pressing button C
+TIMEINCAPTION = Time in the title
+USEUSERCOLOR = Use a custom font color
+COLOR = Font сolor
+
+LOADLIB = Libs used:
+THREADS = Threads
+RUNUSER = Uid
+

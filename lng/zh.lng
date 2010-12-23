@@ -1,0 +1,49 @@
+[Info]
+LNG = 中文
+AUTHOR = situr
+VER= 0.4.2
+
+[Strings]
+SHOW = 转到
+QUIT = 结束进程
+KILL = Kill 进程
+INFO = 进程信息
+SETTING = 设置
+ABOUT = 关于
+EXIT = 退出
+ADD = 添加
+DEL = 删除
+REN = 重命名
+
+OK = 确定
+MENU = 选项
+CANCEL = 取消
+SEL = 选择
+
+MINIALL = 全部最小化
+FLOWPLAYER = 主菜单
+PRIORITY = 优先
+
+DLG_ABOUT = 关于
+DLG_SETTING = 设置
+DLG_PROCINFO = 进程信息
+DLG_ADD = 添加程序
+DLG_REN = 输入新名称:
+
+PROCFILTER = 显示全部进程
+TASKNOWIN = 显示无窗口进程
+SENDREASEPHONE = 使用重叠窗口
+SENDTOIDLE = 使用最小化Java程序
+LANG = 语言：
+PANELFONTSIZE = 侧边栏字体大小:
+LISTFONTSIZE = 列表字体大小:
+SHOWINFOGREEN = 显示按绿色按钮任务信息
+KILLC = 杀死按下按钮荤任务
+TIMEINCAPTION = 时间在标题
+USEUSERCOLOR = 使用自定义字体颜色
+COLOR = 字体颜色
+
+LOADLIB = 已加载的lib:
+THREADS = 供稿
+RUNUSER = 运行代表
+
