@@ -1248,6 +1248,8 @@ void ZTaskMan::addProc(uint pid, QString nameProc, bool cmd )
 		#ifndef NEW_JAVA_LIST
 		listitem->setJava(true);
 		
+		QString picName;
+		
 		int n = nameProc.find("-launch");
 		if ( n > -1 )
 		{
@@ -1262,18 +1264,18 @@ void ZTaskMan::addProc(uint pid, QString nameProc, bool cmd )
 			while ( nameProc.length() < 5 )
 				nameProc = "0"+nameProc;
 			//Set pixmap and name
-			jname = "/mmc/mmca1/.system/"+ settings->JavaFolderInSD +"/DownloadApps/MIDlet"+nameProc+"/Files/MIDlet-1.png" ;
-			if ( !QFile::exists(jname) )
+			picName = "/mmc/mmca1/.system/"+ settings->JavaFolderInSD +"/DownloadApps/MIDlet"+nameProc+"/Files/MIDlet-1.png" ;
+			if ( !QFile::exists(picName) )
 			{
-				jname = "/ezxlocal/download/mystuff/.system/java/DownloadApps/MIDlet"+nameProc+"/Files/MIDlet-1.png";
-				if ( !QFile::exists(jname) )
-					jname = "/ezxlocal/download/mystuff/.system/java/SystemApps/MIDlet"+nameProc+"/Files/MIDlet-1.png";
+				picName = "/ezxlocal/download/mystuff/.system/java/DownloadApps/MIDlet"+nameProc+"/Files/MIDlet-1.png";
+				if ( !QFile::exists(picName) )
+					picName = "/ezxlocal/download/mystuff/.system/java/SystemApps/MIDlet"+nameProc+"/Files/MIDlet-1.png";
 			}				
-			toLog("LoadIMG: "+jname);
-			jname = settings->mapJava[nameProc];
-			if ( jname.length() == 0 )
-				jname = "Java ID:'"+nameProc+"'";
-			listitem->appendSubItem( 1, QString::fromUtf8(jname));					
+			toLog("LoadIMG: "+picName);
+			picName = settings->mapJava[nameProc];
+			if ( picName.length() == 0 )
+				picName = "Java ID:'"+nameProc+"'";
+			listitem->appendSubItem( 1, QString::fromUtf8(picName));					
 		}
 		
 		if ( pm.isNull() )
