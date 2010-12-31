@@ -208,7 +208,7 @@ void ZSettings::reloadSettings()
 	cfg_Language = cfg.readEntry(QString("General"), QString("Lng"), "");
 	if ( !cfg_Language.isEmpty() )
 	{
-		lng->loadLngFile( progDir+"/"+cfg_Language );
+		lng->loadLngFile( progDir+"lng/"+cfg_Language );
 		lng->setCurrentLng( cfg_Language );
 	} else
 		lng->autoLoadLng();		

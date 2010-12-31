@@ -38,6 +38,7 @@ void ZLng::setCurrentLng(QString lng)
 
 void ZLng::loadLngFile(QString fname)
 {
+	zTaskMan->toLog("Lng: "+fname);
 	cLng = new ZConfig( fname );
 }
 
