@@ -52,7 +52,6 @@
 #include <qtextstream.h>
 
 #ifndef RAISE_PHONE
-#include <jnams.h>
 #include <SETUP_UTIL.h>
 #endif
 
