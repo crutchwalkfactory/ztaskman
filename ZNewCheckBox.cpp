@@ -1,3 +1,14 @@
+//
+// Project: zTaskMan
+//
+// C++ Implementation: ZNewCheckBox
+//
+// Description: fix ZCheckBox on Motorola Z6/V8  
+//
+//
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2009
+//
+
 #include "ZNewCheckBox.h"
 
 ZNewCheckBox::ZNewCheckBox( const QString & text, QWidget * parent) : ZCheckBox ( text, parent, 0 )

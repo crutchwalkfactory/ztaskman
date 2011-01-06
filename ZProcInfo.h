@@ -1,10 +1,12 @@
 //
-// C++ Interface: ZProcInfoDlg
+// Project: zTaskMan
 //
-// Description: 
+// C++ Implementation: ZProcInfoDlg
+//
+// Description: process information dlg
 //
 //
-// Author: Ant-ON <prozanton@gmail.com>, (C) 2008-2010
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2008-2011
 //
 
 #ifndef ZPROCINFO_H

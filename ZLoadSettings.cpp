@@ -1,9 +1,22 @@
+//
+// Project: zTaskMan
+//
+// C++ Implementation: ZSettings
+//
+// Description: load configuration and information about application
+//
+//
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2010-2011
+//
+
 #include "ZLoadSettings.h"
 
 #include "lng.h"
 #include "ZDefs.h"
-#include <ZConfig.h>
 #include "zTaskMan.h"
+#include "ZUtils.h"
+
+#include <ZConfig.h>
 
 #include <dirent.h>
 #include <iostream>
@@ -18,8 +31,6 @@
 
 extern ZLng* lng;
 extern ZTaskMan *zTaskMan;
-
-#define toLog zTaskMan->toLog
 
 ZSettings::ZSettings()
 	:QObject()
@@ -70,7 +81,7 @@ QString ZSettings::getJavaFolderInSD()
 	dir = opendir("/mmc/mmca1/.system");
 	if(!dir)
 	{
-		toLog("Can't open SD Card", true, true);
+		toLog("Can't open SD Card");
 	} else	
 	{
 		for(;;) 

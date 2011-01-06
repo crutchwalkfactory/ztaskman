@@ -1,14 +1,12 @@
 //
-// C++ Implementation: TestMain
+// Project: zTaskMan
 //
-// Description:
+// C++ Implementation:
 //
-//
-// Author: BeZ <bezols@gmail.com>, (C) 2008
-//
-// Copyright: See COPYING file that comes with this distribution
+// Description: main function
 //
 //
+
 #include "zTaskMan.h"
 #include "lng.h"
 #include "ZDefs.h"

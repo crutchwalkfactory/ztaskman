@@ -1,14 +1,14 @@
 //
-// C++ Implementation: pe_options
+// Project: zTaskMan
 //
-// Description: 
+// C++ Implementation: ZAppSetting
 //
-//
-// Author: root <root@andLinux>, (C) 2009
-//
-// Copyright: See COPYING file that comes with this distribution
+// Description: setting dlg
 //
 //
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2008-2011
+//
+
 #include "ZSettingDlg.h"
 
 #include <ZSoftKey.h>
@@ -20,6 +20,7 @@
 #include "zTaskMan.h"
 #include "ZLoadSettings.h"
 #include <ZComboBox.h>
+#include "ZUtils.h"
 
 extern ZTaskMan *zTaskMan;
 extern ZLng* lng;
@@ -27,14 +28,14 @@ extern ZSettings* settings;
 
 ZAppSetting::ZAppSetting()
 {
-	zTaskMan->toLog("ZSettingDlg: Start");
+	toLog("ZSettingDlg: Start");
 	
 	setMainWidgetTitle(lng->getString("DLG_SETTING"));
 	
 	ZFormContainer *form = new ZFormContainer(this, 0, ZSkinService::clsZFormContainer);
 	this->setContentWidget(form);
 
-	zTaskMan->toLog("ZSettingDlg: Create CheckBox and Load settings");
+	toLog("ZSettingDlg: Create CheckBox and Load settings");
 	
 	ZConfig cfg(appConf);
 
@@ -90,7 +91,7 @@ ZAppSetting::ZAppSetting()
 	zcbTimeInCaption = new ZCheckBox(lng->getString("TIMEINCAPTION"),form);
 	zcbTimeInCaption->setChecked(settings->cfg_TimeInCaption);	
 	
-	zTaskMan->toLog("ZSettingDlg: init interfase");
+	toLog("ZSettingDlg: init interfase");
 
 	form->addChild(zcbFiltrProc);
 	form->addChild(zcbTaskNoWin);
@@ -139,7 +140,7 @@ ZAppSetting::ZAppSetting()
 	setCSTWidget( softKey );
 	#endif
 		
-	zTaskMan->toLog("ZSettingDlg: end");
+	toLog("ZSettingDlg: end");
 }
 
 ZAppSetting::~ZAppSetting()
@@ -148,7 +149,7 @@ ZAppSetting::~ZAppSetting()
 
 void ZAppSetting::accept()
 {
-	zTaskMan->toLog("ZSettingDlg::save");
+	toLog("ZSettingDlg::save");
 	
 	#ifdef RAISE_PHONE
 	settings->cfg_SendReaisePhone = zcbSendReasePhone->isChecked();

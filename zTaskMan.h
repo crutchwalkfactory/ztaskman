@@ -1,10 +1,12 @@
 //
+// Project: zTaskMan
+//
 // C++ Interface: zTaskMan
 //
-// Description:
+// Description: task manager main window class
 //
 //
-// Author: Ant-ON <prozanton@gmail.com>, (C) 2008-2010
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2008-2011
 //
 
 #ifndef ZGUI_H
@@ -13,8 +15,6 @@
 #include <qobject.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <iostream>
-#include <fstream>
 
 #include <ZApplication.h>
 #include <ZMessageDlg.h>
@@ -63,11 +63,12 @@ class ZTaskMan : public ZKbMainWidget
     ZListBox *lbApp;
     #ifdef RAISE_PHONE
 	int pidPhone;
+	#else
+	bool kvmStats;
 	#endif
 
     void CreateWindow(QWidget* parent);
-    void toLog(QString mes, bool r1 = false , bool r2 = false );
-    
+ 
     QString extractExecName(QString nameProc);
 	bool procFilter(QString nameProc);    
 	bool procFilterSh(QString nameProc);

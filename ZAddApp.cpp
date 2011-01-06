@@ -1,4 +1,6 @@
 //
+// Project: zTaskMan
+//
 // C++ Implementation: ZAddAppDlg
 //
 // Description:
@@ -35,7 +37,7 @@ extern ZSettings * settings;
 ZAddAppDlg::ZAddAppDlg()
     :MyBaseDlg()
 {
-	zTaskMan->toLog("ZAddAppDlg: Start");	
+	toLog("ZAddAppDlg: Start");	
   	setMainWidgetTitle(lng->getString("DLG_ADD"));
   	
 	lbAppList = new ZListBox ( QString ( "%I%M" ), this, 0);
@@ -51,7 +53,7 @@ ZAddAppDlg::ZAddAppDlg()
 	softKey->setClickedSlot ( ZSoftKey::LEFT, this, SLOT ( accept() ) );
 	setCSTWidget ( softKey );
 	
-	zTaskMan->toLog("ZAddAppDlg: Build app list");
+	toLog("ZAddAppDlg: Build app list");
 	
 	procReg( CARD_REGISTRY );
 	#ifdef OLD_PLATFORM
@@ -60,7 +62,7 @@ ZAddAppDlg::ZAddAppDlg()
 	procReg( SYS_REGISTRY );
 	procReg( INSTALLED_DB );
 
-	zTaskMan->toLog("ZAddAppDlg: End");
+	toLog("ZAddAppDlg: End");
 }
 
 void ZAddAppDlg::procReg(QString FileRegistry)
@@ -141,7 +143,7 @@ void ZAddAppDlg::addApp(QString name, QString icon, int i)
 
 void ZAddAppDlg::accept()
 {
-	zTaskMan->toLog("ZAddAppDlg: OK: Add app");
+	toLog("ZAddAppDlg: OK: Add app");
 	
 	int n = lbAppList->currentItem();
 	
@@ -174,7 +176,7 @@ void ZAddAppDlg::accept()
 	 
 	cfg.flush();
 	
-	zTaskMan->toLog("ZAddAppDlg: OK:  End");
+	toLog("ZAddAppDlg: OK:  End");
 	
 	MyBaseDlg::accept();
 }

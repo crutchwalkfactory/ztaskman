@@ -1,14 +1,12 @@
 //
-// C++ Interface: ZProcInfoDlg
+// Project: zTaskMan
 //
-// Description: 
+// C++ Implementation: 
 //
-//
-// Author: root <root@andLinux>, (C) 2008
-//
-// Copyright: See COPYING file that comes with this distribution
+// Description: global defines
 //
 //
+
 #ifndef ZADDAPP_H
 #define ZADDAPP_H
 

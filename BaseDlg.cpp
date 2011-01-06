@@ -1,14 +1,11 @@
 //
-// C++ Implementation: BaseDlg
+// Project: zTaskMan
+//
+// C++ Implementation: MyBaseDlg
 //
 // Description: 
 //
-//
-// Author: root <root@andLinux>, (C) 2008
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
+
 #include "BaseDlg.h"
 #include <ZApplication.h>
 #include <ZSoftKey.h>

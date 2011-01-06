@@ -1,9 +1,11 @@
 //
+// Project: zTaskMan
+//
 // C++ Implementation: ZTaskMan
 //
-// Description: task manager
+// Description: task manager main window class
 //
-// Author: Ant-ON <prozanton@gmail.com>, (C) 2008-2010
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2008-2011
 //
 // Based on zSimpleGUI by BeZ
 //
@@ -49,6 +51,11 @@
 #include <qevent.h>
 #include <qtextstream.h>
 
+#ifndef RAISE_PHONE
+#include <jnams.h>
+#include <SETUP_UTIL.h>
+#endif
+
 #ifndef FIX_HEADER
 #define just_ok TypeOK
 #define yes_no TypeChoose
@@ -73,10 +80,10 @@ ZTaskMan::ZTaskMan ( QWidget* parent, const char*, WFlags )
 	if ( QCopChannel::isRegistered(SDL_LIB_CHENEL) )
 	{
 		QCopChannel::send( SDL_LIB_CHENEL, "hide()" );
-		toLog("Send hide SDL lib",true, true);
+		toLog("Send hide SDL lib");
 	}
 
-    toLog("zTaskMan Channel: "+QString(app->getAppChannelName()),true, true);
+    toLog("zTaskMan Channel: "+QString(app->getAppChannelName()));
   
     timer = NULL;
   
@@ -642,16 +649,6 @@ void ZTaskMan::slotPageChanged(QWidget*)
 	}
 }
 
-void ZTaskMan::toLog(QString mes, bool r1, bool r2)
-{
-	if (r1)
-		std::cout << "====================================================================" << std::endl;
-	if (mes != NULL)
-		std::cout << QCString(mes) << std::endl;
-	if (r2)
-		std::cout << "====================================================================" << std::endl;	
-}
-
 void ZTaskMan::about()
 {
 	ZAboutDialog* aboutDlg = new ZAboutDialog();
@@ -723,16 +720,14 @@ void ZTaskMan::lbAppSel(int index)
 
 void ZTaskMan::slotRaise()
 {
-	toLog( "slot_Raise()", true);
+	toLog( "slot_Raise()");
 	this->show();
-	toLog( NULL, false, true);
 }
 
 void ZTaskMan::slotReturnToIdle( int reason )
 {
-	toLog( "slot_ReturnToIdle("+QString::number(reason)+")", true);
+	toLog( "slot_ReturnToIdle("+QString::number(reason)+")");
 	this->hide();
-	toLog( NULL, false, true);
 }
 
 void ZTaskMan::goToIdle()
@@ -745,12 +740,31 @@ void ZTaskMan::goToIdle()
 		//minimized java
 		QByteArray data;
 		QDataStream stream( data, IO_WriteOnly );
-		#ifdef RAISE_PHONE
-		stream << (int)RETURN_IDLE_BY_FLIP;
-		#else
-		stream << (int)RETURN_IDLE_BY_ZTASKMAN;
-		#endif
+		
+		stream << (int)RETURN_IDLE_BY_SLIDER;
 		QCopChannel::send( SYSTEM_CHANNEL, QCString ( "ReturnToIdle(int)" ), data );
+		
+		#ifndef RAISE_PHONE
+		if ( kvmStats )
+		{
+			toLog("!!! HIDE KVM !!!");	
+			SETUP_Utility util;
+			SETUP_Utility::SLIDE_CLOSED_SETTING_E iSliderAction = util.getSlideClosedSetting();
+			
+			if ( iSliderAction != SETUP_Utility::SLIDE_CLOSE_ALL )
+				SETUP_Utility_Impl::setSlideClosedSetting(SETUP_Utility::SLIDE_CLOSE_ALL);	
+
+			QCopChannel::send( "EZX/System", "sliderClosed" );
+
+			if ( iSliderAction != SETUP_Utility::SLIDE_CLOSE_ALL )
+			{
+				qApp->processEvents();
+				qApp->processEvents();
+			
+				SETUP_Utility_Impl::setSlideClosedSetting(iSliderAction);		
+			}
+		}	
+		#endif		
 	}
 	
 	#ifdef RAISE_PHONE
@@ -781,10 +795,8 @@ void ZTaskMan::javaToTop( QString uid )
 
 void ZTaskMan::pidToTop(int pid)
 {
-	#ifdef RAISE_PHONE
 	goToIdle();
-	#endif
-	
+
 	toLog("App ["+QString::number(pid)+"] show");
 	sendMes( pid, "raise()" ); 
 
@@ -864,6 +876,7 @@ void ZTaskMan::buildAppList()
 void ZTaskMan::buildJavaListNew()
 {
 	toLog("buildJavaListNew");  
+	kvmStats=0;
 	AM_RESULT_CODE_T result = AM_LauncherClient::getAppStates(AM_AppLnk::JavaApp, runJavaList);
 	if ( result == AM_RESULT_SUCCESS )
 	{
@@ -882,6 +895,8 @@ void ZTaskMan::buildJavaListNew()
 		AM_AppLaunchedList::Iterator it;
 		for ( it = runJavaList.begin(); it != runJavaList.end(); ++it )
 		{
+			kvmStats=kvmStats||((*it).state&RUNNING_ON_FOREGROUND);
+			
 			name = confCARD.readEntry ( (*it).uid, "Name", "" );
 			if (name != "")
 			{
@@ -1408,7 +1423,7 @@ void ZTaskMan::buildProcList()
 
 	dir = opendir("/proc");
 	if(!dir)
-		toLog("Can't open /proc", true, true);
+		toLog("Can't open /proc");
 		
 	for(;;) 
 	{
@@ -1465,7 +1480,7 @@ void ZTaskMan::buildProcList()
 				if ( pidPhone == 0 && jname.find("SYSqtapp/phone/phone") > -1 )
 				{
 					pidPhone = pid;
-					toLog("pidPhone="+QString::number(pidPhone),true,true);			
+					toLog("pidPhone="+QString::number(pidPhone));			
 				}
 				#endif			
 				

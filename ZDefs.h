@@ -1,3 +1,12 @@
+//
+// Project: zTaskMan
+//
+// C++ Implementation:
+//
+// Description: global defines
+//
+//
+
 #ifndef ZDEFS
 #define ZDEFS 
 

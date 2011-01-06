@@ -1,3 +1,9 @@
+#
+# Project: zTaskMan
+#
+# Author: Ant-ON <prozanton@gmail.com>, (C) 2008-2011
+#
+
 #PLATFORM=EZX-Z6
 #PLATFORM=EZX-Z6W
 #PLATFORM=EZX-U9
@@ -14,6 +20,7 @@ ALLVISIBLEINFOBAR := NO
 #UPLOAD_PATH :=  /ezxlocal/download/mystuff/
 #UPLOAD_PATH :=  /mmc/mmca1/bin/
 UPLOAD_PATH :=  /ezxlocal/download/mystuff/.system/zTaskMan
+FLAGS_CUSTOM = -pg
 ##################
 
 TOOLPREFIX := /arm-eabi
@@ -108,7 +115,7 @@ ifeq ($(PLATFORM),EZX-VE66)
 ARMLIB     := $(TOOLPREFIX)/arm-linux-gnueabi/lib_E8
 QTDIR	:=	$(TOOLPREFIX)/lib/qt-em35
 EZXDIR	:=	$(TOOLPREFIX)/lib/ezx-ve66
-LINKLIB := -lm -lqte-mt -lezxappbase
+LINKLIB := -lm -lqte-mt -lezxappbase -ljnams
 DIRECTIV := -DEZX_VE66 -DFixByQT -DNEW_PLATFORM -DES_EVENT -DNEW_JAVA_LIST -DHARD_KEY_DAEMON
 #-DSWITCH_BY_UID
 #TARGET	=       $(APPNAME)_VE66
@@ -124,12 +131,12 @@ CC	    =	$(TOOLPREFIX)/bin/arm-linux-gnueabi-gcc
 CXX	    =	$(TOOLPREFIX)/bin/arm-linux-gnueabi-g++
 LD	    =	$(TOOLPREFIX)/bin/arm-linux-gnueabi-g++
 STRIP   =   $(TOOLPREFIX)/bin/arm-linux-strip
-CFLAGS	=	-pipe -Wall -W -O2 -DNO_DEBUG $(DIRECTIV) $(INCPATH) -march=armv6j -mtune=arm1136jf-s -Os 
-CXXFLAGS=	-pipe -DQWS -fno-exceptions -fno-rtti -Wall -W -DNO_DEBUG $(DIRECTIV) $(INCPATH) -march=armv6j -mtune=arm1136jf-s -Os 
+CFLAGS	=	-pipe -Wall -W -O2 -DNO_DEBUG $(DIRECTIV) $(INCPATH) -march=armv6j -mtune=arm1136jf-s -Os $(FLAGS_CUSTOM)
+CXXFLAGS=	-pipe -DQWS -fno-exceptions -fno-rtti -Wall -W -DNO_DEBUG $(DIRECTIV) $(INCPATH) -march=armv6j -mtune=arm1136jf-s -Os $(FLAGS_CUSTOM) 
 INCPATH	=	-I$(QTDIR)/include -I$(EZXDIR)/include -I$(EZXDIR2)/include -I $(TOOLPREFIX)/arm-linux-gnueabi/include
 LDFLAGS	=	-s
 LINK	=	$(TOOLPREFIX)/bin/arm-linux-gnueabi-gcc
-LFLAGS	=	-Wl,-rpath-link,$(EZXDIR)/lib
+LFLAGS	=	-Wl,-rpath-link,$(EZXDIR)/lib $(FLAGS_CUSTOM)
 LIBS	=	$(SUBLIBS) -L$(EZXDIR)/lib -L$(EZXDIR2)/lib -L$(ARMLIB) -L$(QTDIR)/lib $(LINKLIB)
 MOC	    =	$(QTDIR)/bin/moc
 UIC	    =	$(QTDIR)/bin/uic
@@ -233,7 +240,7 @@ all: $(TARGET)
 
 $(TARGET): $(UICDECLS) $(OBJECTS) $(OBJMOC) 
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
-		$(STRIP) -s $(MAKETO)$(TARGET)
+#		$(STRIP) -s $(MAKETO)$(TARGET)
 		
 moc: $(SRCMOC)
 

@@ -1,3 +1,14 @@
+//
+// Project: zTaskMan
+//
+// C++ Implementation: ZNewCheckBox
+//
+// Description: fix ZCheckBox on Motorola Z6/V8  
+//
+//
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2009
+//
+
 #ifndef ZNEWCHECKBOX_H
 #define ZNEWCHECKBOX_H
 

@@ -1,10 +1,12 @@
 //
-// C++ Implementation: ZTaskMan - lng file
+// Project: zTaskMan
 //
-// Description: task manager
+// C++ Implementation: ZLng
+//
+// Description: calss for multi language suppor
 //
 //
-// Author: Ant-ON <prozanton@gmail.com>, (C) 2009
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2009-2011
 //
 
 #include <qobject.h>

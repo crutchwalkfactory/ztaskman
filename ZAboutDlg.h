@@ -1,4 +1,6 @@
 //
+// Project: zTaskMan
+//
 // C++ Interface: ZAboutDlg
 //
 // Description: 

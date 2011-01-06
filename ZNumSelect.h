@@ -1,9 +1,12 @@
 //
+// Project: zTaskMan
+//
 // C++ Implementation: ZNumSelect
 //
-// Description:
+// Description: select number dlg
 //
-// Author: Ant-ON <prozanton@gmail.com>, (C) 2010
+//
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2010-2011
 //
 
 #ifndef ZNUMSELECT_H

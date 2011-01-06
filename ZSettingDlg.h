@@ -1,14 +1,14 @@
 //
-// C++ Interface: pe_options
+// Project: zTaskMan
 //
-// Description: 
+// C++ Implementation: ZAppSetting
 //
-//
-// Author: root <root@andLinux>, (C) 2009
-//
-// Copyright: See COPYING file that comes with this distribution
+// Description: setting dlg
 //
 //
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2008-2011
+//
+
 #ifndef ZSETTINGDLG_H
 #define ZSETTINGDLG_H
 

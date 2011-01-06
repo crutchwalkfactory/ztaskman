@@ -1,10 +1,12 @@
 //
-// C++ Implementation: utils for zTaskMan Project
+// Project: zTaskMan
 //
-// Description:
+// C++ Implementation: 
+//
+// Description: utils functions
 //
 //
-// Author: Ant-ON <prozanton@gmail.com>, (C) 2010
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2010-2011
 //
 
 #include <qpixmap.h>
@@ -26,4 +28,14 @@ void imgSetMaxSize( QPixmap * pm, int a )
 		pm->convertFromImage(image);	
 	}
 	*/
+}
+
+#include <iostream>
+#include <fstream>
+
+void toLog(QString mes)
+{
+	if (!mes.isEmpty())
+		std::cout << QCString(mes) << std::endl;
+
 }

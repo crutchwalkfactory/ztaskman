@@ -2,6 +2,7 @@
 
 #include "ZDefs.h"
 #include "zTaskMan.h"
+#include "ZUtils.h"
 
 #include <dirent.h>
 
@@ -38,13 +39,13 @@ void ZLng::setCurrentLng(QString lng)
 
 void ZLng::loadLngFile(QString fname)
 {
-	zTaskMan->toLog("Lng: "+fname);
+	toLog("Lng: "+fname);
 	cLng = new ZConfig( fname );
 }
 
 void ZLng::getLngList(ZComboBox *list, QString cur)
 {
-	zTaskMan->toLog("getLngList");
+	toLog("getLngList");
 	static DIR *dir;
 	struct dirent *entry;
 	char *name;
@@ -54,7 +55,7 @@ void ZLng::getLngList(ZComboBox *list, QString cur)
 	dir = opendir( ProgDir + "/lng");
 	if(!dir)
 	{
-		zTaskMan->toLog("getLngList: Can't open SD Card", true, true);
+		toLog("getLngList: Can't open SD Card");
 	} else	
 	{
 		int i;
@@ -71,7 +72,7 @@ void ZLng::getLngList(ZComboBox *list, QString cur)
 			qname = QString(name);
 			if (qname.find(".lng")>-1)
 			{
-				zTaskMan->toLog("getLngList: LNG->"+ qname);
+				toLog("getLngList: LNG->"+ qname);
 				ZConfig cfg( QString( ProgDir + "/lng/"+ qname) );
 				lang = cfg.readEntry(QString("Info"), QString("LNG"), "-").utf8();
 				cfg.flush();
@@ -82,12 +83,12 @@ void ZLng::getLngList(ZComboBox *list, QString cur)
 			}
 		}	
 	}
-	zTaskMan->toLog("getLngList: end");
+	toLog("getLngList: end");
 }
 
 QString ZLng::getLngFileName(QString lname)
 {
-	zTaskMan->toLog("getLngFileNam");
+	toLog("getLngFileNam");
 	static DIR *dir;
 	struct dirent *entry;
 	char *name;
@@ -97,7 +98,7 @@ QString ZLng::getLngFileName(QString lname)
 	dir = opendir( ProgDir + "/lng");
 	if(!dir)
 	{
-		zTaskMan->toLog("getLngList: Can't open SD Card", true, true);
+		toLog("getLngList: Can't open SD Card");
 	} else	
 	{
 		for(;;) 
@@ -112,20 +113,20 @@ QString ZLng::getLngFileName(QString lname)
 			qname = QString(name);
 			if (qname.find(".lng")>-1)
 			{
-				zTaskMan->toLog("getLngFileNam: LNG->"+ qname);
+				toLog("getLngFileNam: LNG->"+ qname);
 				ZConfig cfg( QString( ProgDir + "/lng/"+ qname) );
 				lang = cfg.readEntry(QString("Info"), QString("LNG"), "-");
 				if (lang == lname)
 				{
 					cfg.flush();
-					zTaskMan->toLog("getLngFileNam: "+qname);
+					toLog("getLngFileNam: "+qname);
 					return qname;
 				}
 				cfg.flush();
 			}
 		}	
 	}
-	zTaskMan->toLog("getLngFileNam: end");
+	toLog("getLngFileNam: end");
 	return "";
 }
 

@@ -1,3 +1,14 @@
+//
+// Project: zTaskMan
+//
+// C++ Implementation: ZTaskItem
+//
+// Description: item of task list
+//
+//
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2010-2011
+//
+
 #ifndef ZTZTESKITEM_H
 #define ZTZTESKITEM_H
 

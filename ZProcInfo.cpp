@@ -1,10 +1,12 @@
 //
-// C++ Implementation: ZAboutDlg
+// Project: zTaskMan
 //
-// Description:
+// C++ Implementation: ZProcInfoDlg
+//
+// Description: process information dlg
 //
 //
-// Author: Ant-ON <prozanton@gmail.com>, (C) 2008-2010
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2008-2011
 //
 
 #include "BaseDlg.h"
@@ -13,6 +15,7 @@
 #include "ZDefs.h"
 #include "lng.h"
 #include "ZLoadSettings.h"
+#include "ZUtils.h"
 
 #include <ZLabel.h>
 #include <ZApplication.h>
@@ -33,12 +36,12 @@ extern ZSettings * settings;
 ZProcInfoDlg::ZProcInfoDlg(int pid)
     :MyBaseDlg()
 {
-	zTaskMan->toLog("ZProcInfoDlg: Start");
+	toLog("ZProcInfoDlg: Start");
 	QWidget *myWidget = new QWidget ( this ); 
   	
   	setMainWidgetTitle(lng->getString("DLG_PROCINFO"));
   	
-  	zTaskMan->toLog("ZProcInfoDlg: Get Cmd line");
+  	toLog("ZProcInfoDlg: Get Cmd line");
 	char *cmd;
 	char buf[1024];	
 	cmd =0;
@@ -65,7 +68,7 @@ ZProcInfoDlg::ZProcInfoDlg(int pid)
 	}
 	fclose(fp);
 
-	zTaskMan->toLog("ZProcInfoDlg: Add visual component");
+	toLog("ZProcInfoDlg: Add visual component");
 
 	tabWidget = new ZNavTabWidget(this);
 
@@ -138,7 +141,7 @@ ZProcInfoDlg::ZProcInfoDlg(int pid)
 	usesLib->setItemFont (ZListBox::LISTITEM_REGION_C, font, true );
 	usesLib->setItemFont (ZListBox::LISTITEM_REGION_C, font, false );	
 	
-	zTaskMan->toLog("ZProcInfoDlg: Get loadded lib");
+	toLog("ZProcInfoDlg: Get loadded lib");
     QFile f("/proc/"+QString::number(pid)+"/maps");
     QString s;
     QString htm;
@@ -181,7 +184,7 @@ ZProcInfoDlg::ZProcInfoDlg(int pid)
 	
 	this->installEventFilter( this );
 	
-	zTaskMan->toLog("ZProcInfoDlg: End");
+	toLog("ZProcInfoDlg: End");
 }
 
 ZProcInfoDlg::~ZProcInfoDlg()

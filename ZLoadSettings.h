@@ -1,10 +1,12 @@
 //
+// Project: zTaskMan
+//
 // C++ Implementation: ZSettings
 //
-// Description:
+// Description: load configuration and information about application
 //
 //
-// Author: Ant-ON <prozanton@gmail.com>, (C) 2009-2010
+// Author: Ant-ON <prozanton@gmail.com>, (C) 2010-2011
 //
 
 #ifndef ZLOADSETTINGS_H
