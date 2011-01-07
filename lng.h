@@ -41,7 +41,7 @@ class ZLng
 };
 
 //ZAboutDlg
-#define LNG_VER "0.4.2"
+#define LNG_VER "0.4.3"
 //#define LNG_THANKS "Thanks to Abram, BeZ"
 #ifdef EZX_VE66
 #define LNG_THANKS   "Special build for PearlMod!"

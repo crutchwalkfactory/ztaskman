@@ -12,14 +12,15 @@
 #include <qpixmap.h>
 #include <qimage.h>
 
-#include <ZSkinTool.h>
+//#include <ZSkinTool.h>
 
 void imgSetMaxSize( QPixmap * pm, int a )
 {
+	/*	
 	ZSkinTool tool;
 	*pm=tool.process(*pm, a, a, spScale);
+	*/
 	
-	/*
 	if ( pm->height() > a || pm->width() > a )
 	{
 		QImage image;
@@ -27,7 +28,6 @@ void imgSetMaxSize( QPixmap * pm, int a )
 		image = image.smoothScale(a, a);
 		pm->convertFromImage(image);	
 	}
-	*/
 }
 
 #include <iostream>

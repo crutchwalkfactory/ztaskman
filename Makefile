@@ -20,7 +20,7 @@ ALLVISIBLEINFOBAR := NO
 #UPLOAD_PATH :=  /ezxlocal/download/mystuff/
 #UPLOAD_PATH :=  /mmc/mmca1/bin/
 UPLOAD_PATH :=  /ezxlocal/download/mystuff/.system/zTaskMan
-FLAGS_CUSTOM = -pg
+#FLAGS_CUSTOM = -pg
 ##################
 
 TOOLPREFIX := /arm-eabi
@@ -107,7 +107,6 @@ QTDIR	:=	$(TOOLPREFIX)/lib/qt-em35
 EZXDIR	:=	$(TOOLPREFIX)/lib/ezx-em35
 LINKLIB := -lm -lqte-mt -lezxappbase
 DIRECTIV := -DEZX_EM35 -DFixByQT -DNEW_PLATFORM -DES_EVENT -DNEW_JAVA_LIST -DHARD_KEY_DAEMON
-#-DSWITCH_BY_UID
 TARGET	=       $(APPNAME)_EM35
 endif
 
@@ -117,7 +116,6 @@ QTDIR	:=	$(TOOLPREFIX)/lib/qt-em35
 EZXDIR	:=	$(TOOLPREFIX)/lib/ezx-ve66
 LINKLIB := -lm -lqte-mt -lezxappbase -ljnams
 DIRECTIV := -DEZX_VE66 -DFixByQT -DNEW_PLATFORM -DES_EVENT -DNEW_JAVA_LIST -DHARD_KEY_DAEMON
-#-DSWITCH_BY_UID
 #TARGET	=       $(APPNAME)_VE66
 TARGET	=       $(APPNAME)
 UPLOAD_PATH :=  /ezxlocal/download/mystuff/.system/zTaskMan
@@ -240,7 +238,7 @@ all: $(TARGET)
 
 $(TARGET): $(UICDECLS) $(OBJECTS) $(OBJMOC) 
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJMOC) $(LIBS)
-#		$(STRIP) -s $(MAKETO)$(TARGET)
+		$(STRIP) -s $(MAKETO)$(TARGET)
 		
 moc: $(SRCMOC)
 

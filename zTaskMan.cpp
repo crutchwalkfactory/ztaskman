@@ -318,11 +318,7 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	#ifndef ALL_VISIBLE_INFO_BAR
 	tabWidget->addTab(sv, QIconSet(imgTab1), "");
 	
-	#ifndef EZX_E8
 	setContentWidget ( tabWidget );
-	#else
-	ZSetLayout(tabWidget, ZGlobal::getContentR());
-	#endif
 	
 	sv->addChild(lbProc, 0, 0);
 	sv->addChild(sp, SCREEN_WHIDTH-PANEL_WHIDTH, 0);
@@ -394,11 +390,7 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	softKey->setTextForOptMenuShow(lng->getString("SEL"), lng->getString("CANCEL"));	
 	softKey->setText ( ZSoftKey::RIGHT, lng->getString("EXIT"), ( ZSoftKey::TEXT_PRIORITY ) 0 );//Exit
 	
-	#ifndef EZX_E8
 	setSoftKey(softKey);
-	#else
-	ZSetLayout(softKey, ZGlobal::getCstR());
-	#endif
 		
 	//**************************** SIGNAL ******************************
 	toLog("CreateWindow: SIGNAL");
@@ -762,7 +754,7 @@ void ZTaskMan::goToIdle()
 			
 				SETUP_Utility_Impl::setSlideClosedSetting(iSliderAction);		
 			}
-		}	
+		}
 		#endif		
 	}
 	
@@ -794,7 +786,9 @@ void ZTaskMan::javaToTop( QString uid )
 
 void ZTaskMan::pidToTop(int pid)
 {
+	#ifndef RAISE_PHONE
 	goToIdle();
+	#endif
 
 	toLog("App ["+QString::number(pid)+"] show");
 	sendMes( pid, "raise()" ); 
@@ -1349,9 +1343,7 @@ void ZTaskMan::addProc(uint pid, QString nameProc, bool cmd )
 
 QString ZTaskMan::extractExecName(QString nameProc)
 {
-	toLog(nameProc);
-
-	while ( !(nameProc.find("/lib/")<0) )
+	while ( nameProc.find("/lib/")>=0 )
 		nameProc.remove(1, nameProc.find(" ") );
 	
 	nameProc.remove(nameProc.find(" "), nameProc.length() );
@@ -1363,7 +1355,7 @@ QString ZTaskMan::extractExecName(QString nameProc)
 			nameProc.remove(0,nameProc.find("/")+1 );
 		}	
 	}		
-	toLog(nameProc);
+
 	return nameProc;
 }
 
@@ -1371,14 +1363,14 @@ bool ZTaskMan::procFilter(QString nameProc)
 {
 	if ( settings->cfg_FiltrProc == 0 )
 	{
-		if ( nameProc.find("zTaskMan") > -1 )
+		if ( nameProc.find("zTaskMan") >= 0 )
 		{
 			return 0;
 		}
 		return 1;		
 	}
 
-	if ( settings->cfg_HideProcList.find( "!" + nameProc + "!" ) > -1 )
+	if ( settings->cfg_HideProcList.find( "!" + nameProc + "!" ) >= 0 )
 	{
 		return 0;	
 	} 
@@ -1388,15 +1380,13 @@ bool ZTaskMan::procFilter(QString nameProc)
 
 bool ZTaskMan::procFilterSh(QString nameProc)
 {
-	if ( nameProc.find("/.Programs/") != -1 )
+	if ( nameProc.find("/.Programs/") >= 0 || 
+			nameProc.find("/download/mystuff/") >= 0 || 
+				nameProc.find("/mmc/mmca") >= 0 )
 	{
 		return 1;
-	}	
-	
-	if ( nameProc.find("/download/mystuff/") != -1 )
-	{
-		return 1;
-	}	
+	}
+		
 	return 0;
 }
 
@@ -1413,7 +1403,7 @@ void ZTaskMan::buildProcList()
 	struct dirent *entry;
 	char *name;
 	int n;
-	char buf[1024];
+	char buf[255];
 	FILE *fp;
 	int pid;
 	char *cmd;

@@ -23,7 +23,7 @@ ZLng::~ZLng()
 QString ZLng::getString(QString str)
 {
 	if ( cLng )
-		return QString::fromUtf8(cLng->readEntry(QString("Strings"), str, str).utf8());
+		return QString::fromUtf8(cLng->readEntry("Strings", str, str).utf8());
 	return str;
 }
 
