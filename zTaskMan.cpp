@@ -99,6 +99,7 @@ ZTaskMan::ZTaskMan ( QWidget* parent, const char*, WFlags )
 	#endif
   
 	CreateWindow ( parent );
+	qApp->setMainWidget( this );
 	this->show();
 	isShow = true;
 	lbProc->setGeometry( 0, 0, SCREEN_WHIDTH-55, sv->height());
