@@ -89,6 +89,9 @@ class ZTaskMan : public ZKbMainWidget
 	#endif
 	void pidToTop(int pid);	
 	void goToIdle();
+	#ifndef RAISE_PHONE
+	void hideAllJava();
+	#endif	
 	
 	void createProcMenu();
 	void createAppMenu();

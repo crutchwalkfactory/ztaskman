@@ -4,6 +4,7 @@
 # Author: Ant-ON <prozanton@gmail.com>, (C) 2008-2011
 #
 
+#PLATFORM=EZX-VE66
 #PLATFORM=EZX-Z6
 #PLATFORM=EZX-Z6W
 #PLATFORM=EZX-U9

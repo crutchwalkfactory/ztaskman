@@ -737,25 +737,7 @@ void ZTaskMan::goToIdle()
 		QCopChannel::send( SYSTEM_CHANNEL, QCString ( "ReturnToIdle(int)" ), data );
 		
 		#ifndef RAISE_PHONE
-		if ( kvmStats )
-		{
-			toLog("!!! HIDE KVM !!!");	
-			SETUP_Utility util;
-			SETUP_Utility::SLIDE_CLOSED_SETTING_E iSliderAction = util.getSlideClosedSetting();
-			
-			if ( iSliderAction != SETUP_Utility::SLIDE_CLOSE_ALL )
-				SETUP_Utility_Impl::setSlideClosedSetting(SETUP_Utility::SLIDE_CLOSE_ALL);	
-
-			QCopChannel::send( "EZX/System", "sliderClosed" );
-
-			if ( iSliderAction != SETUP_Utility::SLIDE_CLOSE_ALL )
-			{
-				qApp->processEvents();
-				qApp->processEvents();
-			
-				SETUP_Utility_Impl::setSlideClosedSetting(iSliderAction);		
-			}
-		}
+		hideAllJava();
 		#endif		
 	}
 	
@@ -769,6 +751,31 @@ void ZTaskMan::goToIdle()
 
 	qApp->processEvents();
 }
+
+#ifndef RAISE_PHONE
+void ZTaskMan::hideAllJava()
+{
+	if ( kvmStats )
+	{
+		toLog("!!! HIDE KVM !!!");	
+		SETUP_Utility_Impl util;
+		SETUP_Utility::SLIDE_CLOSED_SETTING_E iSliderAction = util.getSlideClosedSetting();
+
+		if ( iSliderAction != SETUP_Utility::SLIDE_CLOSE_ALL )
+			util.setSlideClosedSetting(SETUP_Utility::SLIDE_CLOSE_ALL);	
+		
+		QCopChannel::send( "EZX/System", "sliderClosed" );
+
+		if ( iSliderAction != SETUP_Utility::SLIDE_CLOSE_ALL )
+		{
+			qApp->processEvents();
+			qApp->processEvents();
+
+			util.setSlideClosedSetting( iSliderAction );
+		}
+	}
+}
+#endif
 
 #ifdef NEW_JAVA_LIST
 void ZTaskMan::javaToTop( QString uid )
@@ -788,7 +795,7 @@ void ZTaskMan::javaToTop( QString uid )
 void ZTaskMan::pidToTop(int pid)
 {
 	#ifndef RAISE_PHONE
-	goToIdle();
+	hideAllJava();
 	#endif
 
 	toLog("App ["+QString::number(pid)+"] show");
@@ -1400,7 +1407,7 @@ void ZTaskMan::buildProcList()
 	pidPhone = 0;
 	#endif
 
-	static DIR *dir;
+	DIR *dir;
 	struct dirent *entry;
 	char *name;
 	int n;
