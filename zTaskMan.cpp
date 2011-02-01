@@ -419,6 +419,8 @@ void ZTaskMan::showList()
     buildJavaListNew();
     #endif 
 	
+	lbProc->setCurrentItem(0);
+	
 	lbProc->update();
 	
 	toLog(QString("showList: end"));
@@ -948,7 +950,7 @@ void ZTaskMan::buildJavaListNew()
 			listitem->appendSubItem ( 1, QString( name ), true );
 			listitem->setJava(true);
 			listitem->setUID((*it).uid);		
-			lbProc->insertItem ( listitem, 1, true );	
+			lbProc->insertItem ( listitem, 0, true );	
 		}
 	}
 	toLog("buildJavaListNew: end");  
@@ -1100,8 +1102,11 @@ void ZTaskMan::menu_procQuit()
             break;
         }
 		
-		for ( int j = 0; j < 50; j++ )
+		for ( int j = 0; j < 10; j++ )
+		{
 			qApp->processEvents();
+			usleep(50);
+		}
     }
 }
 
