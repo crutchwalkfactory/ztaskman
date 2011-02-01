@@ -420,7 +420,6 @@ void ZTaskMan::showList()
     #endif 
 	
 	lbProc->setCurrentItem(0);
-	
 	lbProc->update();
 	
 	toLog(QString("showList: end"));
@@ -488,7 +487,7 @@ void ZTaskMan::drawGraph(ZImage * img, int array[GRAPH_LEN], const QColor & colo
 				array[n] = old;
 			else
 				old = array[n];
-		paint->lineTo((GRAPH_WIDTH/(GRAPH_LEN-1))*i,GRAPH_HEIGHT-array[n]/(100/GRAPH_HEIGHT));
+		paint->lineTo((GRAPH_WIDTH/(GRAPH_LEN-1))*i,GRAPH_HEIGHT+1-array[n]/(100/(GRAPH_HEIGHT-1)));
 	}
 	img->setPixmap(*pix);
 	img->update();
@@ -1654,12 +1653,38 @@ void ZTaskMan::setMemInfo()
 
 void ZTaskMan::Quit()
 {
-	qApp->quit();
+	if ( isDaemon )
+	{
+		hide();
+		//Stop update info (free mem, cpu freq and etc)
+		delete timer;
+		timer = NULL;
+		#ifndef NO_SHOW_GRAPH
+		//Free mem on graphics
+		imgGraphProc->setPixmap(NULL);
+		imgGraphMem->setPixmap(NULL);
+		imgGraphSwap->setPixmap(NULL);
+		memset(proc_graph, 0, GRAPH_LEN*sizeof(int));
+		memset(swap_graph, 0, GRAPH_LEN*sizeof(int));
+		memset(mem_graph, 0, GRAPH_LEN*sizeof(int));
+		graph_old=0;
+		#endif
+		//Free mem on app list
+		lbProc->clear();
+	} else
+		qApp->quit();
 }
 
 void ZTaskMan::Show()
 {
-	show();
+	if ( isHidden() )
+	{
+		show();
+		tabWidget->setCurrentPage(0);
+		showList();
+		showInfo();
+	} else
+		show();		
 }
 
 void ZTaskMan::setTimeToCaption()

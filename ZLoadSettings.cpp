@@ -35,18 +35,17 @@ extern ZTaskMan *zTaskMan;
 ZSettings::ZSettings()
 	:QObject()
 {
-	zTaskMan = NULL;
+	//For don't action on Red Button
+	disconnect( qApp, SIGNAL(askReturnToIdle(int)), qApp, SLOT(slotReturnToIdle(int)) );
 	
+	//Get programm dir
 	progDir = QString ( qApp->argv()[0] ) ;
 	int i = progDir.findRev ( "/" );
 	progDir.remove ( i+1, progDir.length() - i );
-	
+	lng->ProgDir = progDir;	
 	qDebug("cur path: " + progDir);
-	
-	lng->ProgDir = progDir;
-	
+
 	reloadSettings();
-	
 	JavaFolderInSD = getJavaFolderInSD();
 	
 	#ifdef HARD_KEY_DAEMON
@@ -56,9 +55,12 @@ ZSettings::ZSettings()
 		cfg_DaemonKey = KEY_POWER;
 		#elif EZX_ZN5
 		cfg_DaemonKey = KEY_POWER;
+		#elif EZX_VE66
+		cfg_DaemonKey = 4147;
 		#else
 		cfg_DaemonKey = 0;
 		#endif
+		bIgnoreSignal = false;
 	#endif
 }
 
@@ -303,6 +305,13 @@ void ZSettings::showGUI()
 		zTaskMan->Show();
 }
 
+#ifdef HARD_KEY_DAEMON
+void ZSettings::timerEvent ( QTimerEvent * )
+{
+	bIgnoreSignal = false;
+}
+#endif
+
 void ZSettings::siganalReceived( const QCString &msg, const QByteArray &data )
 {
 	#ifdef HARD_KEY_DAEMON
@@ -314,25 +323,21 @@ void ZSettings::siganalReceived( const QCString &msg, const QByteArray &data )
 		std::cout << "Key "<< key << ", type " << type << std::endl;
 		if( key == cfg_DaemonKey && type == KEY_MSG_PRESS )
 		{
+			killTimers();
 			if (zTaskMan == NULL)
 				zTaskMan = new ZTaskMan ( NULL, NULL );	
 			else
-				zTaskMan->Show();		
+				zTaskMan->Show();
+			bIgnoreSignal = true;
+			startTimer(2000);
 		}
     } else
     #endif
-	if ( msg == "show()" ) 
+	if ( (msg == "show()" || msg == "newshow()") && SHOW_EXT_CHECK ) 
 	{
 		if (zTaskMan == NULL)
 			zTaskMan = new ZTaskMan ( NULL, NULL );	
 		else
 			zTaskMan->Show();
-	} else 
-	if ( msg == "newshow()" )
-	{
-		if (zTaskMan == NULL)
-			zTaskMan = new ZTaskMan ( NULL, NULL );	
-		else
-			zTaskMan->Show();
-	} 
+	}
 }

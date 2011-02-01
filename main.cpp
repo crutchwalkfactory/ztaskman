@@ -24,16 +24,13 @@ ZApplication* app;
 ZLng* lng;
 ZSettings * settings;
 bool isDaemon;
-bool onQuit;
 
 int main ( int argc, char **argv )
 {
 	app = new ZApplication ( argc, argv );
 	
 	int ret = -1;
-	
 	isDaemon = false;
-	
 	zTaskMan = NULL;
   
 	if ( QString(argv[1]) == QString("-daemon")  ) 
@@ -57,10 +54,9 @@ int main ( int argc, char **argv )
 		{
 			qDebug("isDaemon");
 			settings->startDaemonChenel();
-			onQuit = false;
-			while ( !onQuit )
-			{		
-				ret = app->exec();
+			ret = app->exec();
+			if ( zTaskMan )
+			{
 				delete zTaskMan;
 				zTaskMan = NULL;
 			}

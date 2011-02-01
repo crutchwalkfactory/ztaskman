@@ -97,6 +97,14 @@ public slots:
   	void siganalReceived(const QCString&, const QByteArray&);
 	
 protected:
+	#ifdef HARD_KEY_DAEMON
+	void timerEvent ( QTimerEvent * );
+    bool bIgnoreSignal;
+    #define SHOW_EXT_CHECK !bIgnoreSignal
+    #else
+    #define SHOW_EXT_CHECK true
+    #endif
+    
     QCopChannel* channelStart;
     QString progDir;
 };
