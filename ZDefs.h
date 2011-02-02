@@ -86,7 +86,7 @@
 #define SCREEN_HEIGHT 240
 #endif
 
-#define PANEL_WHIDTH 55
+#define PANEL_WHIDTH 50
 
 #ifndef EZX_E8
 #define GRAPH_LEN 10
@@ -100,5 +100,9 @@
 
 #define INC_GRAPH(p) ((p<GRAPH_LEN-1)?(p++):(p=0))
 #define DEC_EX_GRAPH(p) ((p>1)?(p-1):(GRAPH_LEN-1))
+
+#ifdef OLD_PLATFORM
+#define endsWith(p) right(QString(p).length())==p
+#endif
 
 #endif

@@ -138,7 +138,6 @@ class ZTaskMan : public ZKbMainWidget
     ZSoftKey *softKey;
     ZOptionsMenu* menu;
 	ZLabel *CPUFreq;
-	ZLabel *CPUn;
 	ZLabel *RAM;
 	ZScrollPanel * sp;	
 	#ifdef OLD_PLATFORM
@@ -157,7 +156,6 @@ class ZTaskMan : public ZKbMainWidget
 	#endif
 	
 	QTimer *timer;
-	bool isShow;
 	
 	#ifndef NO_SHOW_GRAPH
 	int proc_graph[GRAPH_LEN];

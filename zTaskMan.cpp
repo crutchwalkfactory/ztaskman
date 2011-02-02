@@ -29,7 +29,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <dirent.h>
-#include <fcntl.h>
+#include <time.h>
 #include <signal.h>
 #include <sys/wait.h>
 
@@ -88,12 +88,9 @@ ZTaskMan::ZTaskMan ( QWidget* parent, const char*, WFlags )
   
 	#ifndef NO_SHOW_GRAPH
 	//Init proc and mem graph
-	for (int i=0;i<GRAPH_LEN;i++)
-	{
-		proc_graph[i]=0;
-		mem_graph[i]=0;
-		swap_graph[i]=0;
-	}
+	memset(proc_graph, 0, GRAPH_LEN*sizeof(int));
+	memset(swap_graph, 0, GRAPH_LEN*sizeof(int));
+	memset(mem_graph, 0, GRAPH_LEN*sizeof(int));
 	graph_old=0;
 	upGraph=false;
 	#endif
@@ -101,9 +98,8 @@ ZTaskMan::ZTaskMan ( QWidget* parent, const char*, WFlags )
 	CreateWindow ( parent );
 	qApp->setMainWidget( this );
 	this->show();
-	isShow = true;
-	lbProc->setGeometry( 0, 0, SCREEN_WHIDTH-55, sv->height());
-	sp->setGeometry( SCREEN_WHIDTH-55, 0, 55, sv->height());
+	lbProc->setGeometry( 0, 0, SCREEN_WHIDTH-PANEL_WHIDTH, sv->height());
+	sp->setGeometry( SCREEN_WHIDTH-PANEL_WHIDTH, 0, PANEL_WHIDTH, sv->height());
 }
 
 ZTaskMan::~ZTaskMan()
@@ -162,51 +158,25 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	#endif	
 	
 	CPUFreq = new ZLabel("", sp, "ZLabel");
-	CPUFreq->setFixedWidth( PANEL_WHIDTH );
 	CPUFreq->setFont( font );
 	CPUFreq->setAlignment( ZLabel::AlignHCenter );
-	#ifndef NO_STD_BAR
-	sp->addChild(CPUFreq,0, 47);
-	#else
-	sp->addChild(CPUFreq,0, 45);
-	#endif
-	
-	CPUn = new ZLabel("", sp, "ZLabel");
-	CPUn->setFixedWidth( PANEL_WHIDTH );
-	CPUn->setFont( font );
-	CPUn->setAlignment( ZLabel::AlignHCenter );
-	#ifndef NO_STD_BAR
-	sp->addChild(CPUn, 0, 63);
-	#else
-	sp->addChild(CPUn, 0, 60);
-	#endif
-	
-	zImg = new ZImage(sp);
-	QPixmap img1_1;
-	img1_1.load(settings->getProgramDir() + "/panel/progressv.png"  );
-	zImg->setPixmap(img1_1);
-	#ifndef NO_STD_BAR
-	sp->addChild(zImg, 49, 0);
-	#else
-	zImg->setFixedHeight(38);
-	sp->addChild(zImg, 49, 3);
-	#endif
+	CPUFreq->setFixedWidth(PANEL_WHIDTH);
+	//CPUFreq->setFixedHeight((settings->cfg_PanelFontSize+1)*4);
+	CPUFreq->setNumLines(2);
+	CPUFreq->setLeading(1);
+	WIDGET_PADDING_INFO_T wNoPading; 
+	memset(&wNoPading, 0, sizeof(wNoPading));
+	CPUFreq->setPadding(wNoPading);
+	sp->addChild(CPUFreq, 0, zImg->y()+zImg->height()+1);
 	
 	imgCPU = new ZImage(sp);
-	QPixmap img1_2;
-	img1_2.load(settings->getProgramDir() + "/panel/noprogressv.png"  );
-	imgCPU->setPixmap(img1_2);
-	imgCPU->setFixedHeight(1);
-	#ifndef NO_STD_BAR
-	sp->addChild(imgCPU, 49, 0);
-	#else
-	sp->addChild(imgCPU, 49, 3);
-	#endif
-	
+	img.load(settings->getProgramDir() + "/panel/progressv.png"  );
+	imgCPU->setPixmap(img);
+	sp->addChild(imgCPU, zImg->x()+zImg->width()-imgCPU->width(), zImg->y());
+
 	zImg = new ZImage(sp);
-	QPixmap img2;
-	img2.load(settings->getProgramDir() + "/panel/ram.png"  );
-	zImg->setPixmap(img2);
+	img.load(settings->getProgramDir() + "/panel/ram.png"  );
+	zImg->setPixmap(img);
 	#ifndef NO_STD_BAR
 	sp->addChild(zImg, 0, 80);
 	#else
@@ -217,39 +187,20 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	RAM->setFixedWidth( PANEL_WHIDTH );
 	RAM->setFont( font );
 	RAM->setAlignment( ZLabel::AlignHCenter );
-	#ifndef NO_STD_BAR
-	sp->addChild(RAM, 2, 132);
-	#else
-	sp->addChild(RAM, 2, 94+BAR_SEP_SIZE);
-	#endif
-	 
-	zImg = new ZImage(sp);
-	QPixmap img2_1;
-	img2_1.load(settings->getProgramDir() + "/panel/noprogress.png"  );
-	zImg->setPixmap(img2_1);
-	#ifndef NO_STD_BAR
-	sp->addChild(zImg, 4, 151);
-	#else
-	sp->addChild(zImg, 4, 110+BAR_SEP_SIZE);
-	#endif
+	RAM->setPadding(wNoPading);
+	sp->addChild(RAM, 0, zImg->y()+zImg->height()+1);
 	
 	imgMEM = new ZImage(sp);
-	QPixmap img2_2;
-	img2_2.load(settings->getProgramDir() + "/panel/progress.png"  );
-	imgMEM->setPixmap(img2_2);
+	img.load(settings->getProgramDir() + "/panel/progress.png"  );
+	imgMEM->setPixmap(img);
 	imgMEM->setFixedWidth(1);
-	#ifndef NO_STD_BAR
-	sp->addChild(imgMEM, 4, 151);
-	#else
-	sp->addChild(imgMEM, 4, 110+BAR_SEP_SIZE);
-	#endif
+	sp->addChild(imgMEM, zImg->x(), zImg->y()+zImg->height()-imgMEM->height());
 	
 	zImg = new ZImage(sp);
-	QPixmap img3;
-	img3.load(settings->getProgramDir() + "/panel/swap.png"  );
-	zImg->setPixmap(img3);
+	img.load(settings->getProgramDir() + "/panel/swap.png"  );
+	zImg->setPixmap(img);
 	#ifndef NO_STD_BAR
-	sp->addChild(zImg, 2, 155);
+	sp->addChild(zImg, 0, 155);
 	#else
 	sp->addChild(zImg, 2, 115+BAR_SEP_SIZE*2);
 	#endif
@@ -258,33 +209,14 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	SWAP->setFixedWidth( PANEL_WHIDTH );
 	SWAP->setFont( font );
 	SWAP->setAlignment( ZLabel::AlignHCenter );
-	#ifndef NO_STD_BAR
-	sp->addChild(SWAP, 0, 201);	
-	#else
-	sp->addChild(SWAP, 0, 135+BAR_SEP_SIZE*2);	
-	#endif
-	
-	zImg = new ZImage(sp);
-	QPixmap img3_1;
-	img3_1.load(settings->getProgramDir() + "/panel/noprogress.png"  );
-	zImg->setPixmap(img3_1);
-	#ifndef NO_STD_BAR
-	sp->addChild(zImg, 4, 219);
-	#else
-	sp->addChild(zImg, 4, 153+BAR_SEP_SIZE*2);
-	#endif
-	
+	SWAP->setPadding(wNoPading);
+	sp->addChild(SWAP, 0, zImg->y()+zImg->height()+1);	
 	
 	imgSWAP = new ZImage(sp);
-	QPixmap img3_2;
-	img3_2.load(settings->getProgramDir() + "/panel/progress.png"  );
-	imgSWAP->setPixmap(img3_2);
+	img.load(settings->getProgramDir() + "/panel/progress.png"  );
+	imgSWAP->setPixmap(img);
 	imgSWAP->setFixedWidth(1);
-	#ifndef NO_STD_BAR
-	sp->addChild(imgSWAP, 4, 219);
-	#else
-	sp->addChild(imgSWAP, 4, 153+BAR_SEP_SIZE*2);
-	#endif
+	sp->addChild(imgSWAP, zImg->x(), zImg->y()+zImg->height()-imgSWAP->height());
 	
 	lbApp = new ZListBox ( QString ( "%I%M" ), this, 0);
 	#ifndef ALL_VISIBLE_INFO_BAR  
@@ -309,7 +241,6 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	if ( settings->cfg_UserFont )
 	{	
 		CPUFreq->setFontColor(settings->cfg_FontColor);
-		CPUn->setFontColor(settings->cfg_FontColor);
 		RAM->setFontColor(settings->cfg_FontColor);
 		SWAP->setFontColor(settings->cfg_FontColor);
 	}
@@ -506,14 +437,11 @@ void ZTaskMan::slotUpdate()
 	}
 	#endif	
 	
-	CPUFreq->setText(QString::number(getCPUFreq())+"MHz");
+	int cur = getCPUn();
+	CPUFreq->setText(QString::number(getCPUFreq())+"MHz\n"+QString::number(cur)+"%");
 	CPUFreq->update();
 	
-	int cur = getCPUn();
-	CPUn->setText(QString::number(cur)+"%");
-	CPUn->update();
-	
-	imgCPU->setFixedHeight( 38-(int)(cur*0.38) );
+	imgCPU->setFixedHeight( 40 - (int)(cur*0.40) );
 	imgCPU->update();
 	
 	if ( settings->cfg_TimeInCaption )
@@ -1212,14 +1140,12 @@ void ZTaskMan::menu_appSetting()
 		
 		font.setPointSize ( settings->cfg_PanelFontSize );
 		CPUFreq->setFont( font );
-		CPUn->setFont( font );
 		RAM->setFont( font );
 		SWAP->setFont( font );
 
 		if ( settings->cfg_UserFont )
 		{	
 			CPUFreq->setFontColor(settings->cfg_FontColor);
-			CPUn->setFontColor(settings->cfg_FontColor);
 			RAM->setFontColor(settings->cfg_FontColor);
 			SWAP->setFontColor(settings->cfg_FontColor);
 		}
@@ -1639,9 +1565,7 @@ void ZTaskMan::setMemInfo()
 	mem_graph[graph_old]= (int)((double)(MemFree*100)/MemTotal);
 	swap_graph[graph_old]=(int)((double)(SWAPFree*100)/SWAPTotal);
 	imgMEM->setFixedWidth( 48-mem_graph[graph_old]/(100/48) );
-	imgSWAP->setFixedWidth( 48-swap_graph[graph_old]/(100/48) );	
-	toLog("Set mem:"+QString::number(mem_graph[graph_old]));
-	toLog("Set swap:"+QString::number(swap_graph[graph_old]));
+	imgSWAP->setFixedWidth( 48-swap_graph[graph_old]/(100/48) );
 	#else
 	imgMEM->setFixedWidth( (int) ((48/((double)MemTotal))*(MemTotal-MemFree)) );
 	imgSWAP->setFixedWidth( (int)((48/((double)SWAPTotal))*SWAPFree) );
@@ -1689,7 +1613,7 @@ void ZTaskMan::Show()
 
 void ZTaskMan::setTimeToCaption()
 {
-	time_t  currtime;
+	time_t currtime;
 	time(&currtime);
 	
 	int h = localtime(&currtime)->tm_hour;
