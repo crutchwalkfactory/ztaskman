@@ -1,12 +1,9 @@
 #include "lng.h"
 
 #include "ZDefs.h"
-#include "zTaskMan.h"
 #include "ZUtils.h"
 
 #include <dirent.h>
-
-extern ZTaskMan *zTaskMan;
 
 ZLng::ZLng()
 {

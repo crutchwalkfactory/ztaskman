@@ -19,6 +19,7 @@ OK = OK
 MENU = Menu
 CANCEL = Cancel
 SEL = Select
+NO = No
 
 MINIALL = Minimize all
 FLOWPLAYER = Main menu
@@ -38,7 +39,7 @@ LANG = Language:
 PANELFONTSIZE = Panel font size:
 LISTFONTSIZE = List font size:
 SHOWINFOGREEN = Show task info by pressing the green button
-KILLC = Kill task by pressing button C
+ACTIONC = Action by button C:
 TIMEINCAPTION = Time in the title
 USEUSERCOLOR = Use a custom font color
 COLOR = Font сolor

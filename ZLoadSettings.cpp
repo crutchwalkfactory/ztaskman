@@ -226,13 +226,7 @@ void ZSettings::reloadSettings()
 	} else
 		lng->autoLoadLng();		
 	cfg_FiltrProc = cfg.readBoolEntry(QString("Task"), QString("FiltrProc"), true);
-	
-	cfg_HideProcList = cfg.readEntry(QString("Task"), QString("FiltrProcList"), QString("!am!zTaskMan!phone!messaging!brwdaemon!misc1!windowsserver!vr!addrbk!br!")
-	#if defined(EZX_VE66) || defined(EZX_EM35)
-	+QString("xp!")
-	#endif
-	); 
-
+	cfg_HideProcList = cfg.readEntry(QString("Task"), QString("FiltrProcList"), QString(HIDE_PROCESS));
 	cfg_ShowAppNoWindow = cfg.readBoolEntry(QString("Task"), QString("ShowAppNoWindow"), false);
 	cfg_PanelFontSize = cfg.readNumEntry(QString("Font"), QString("PanelFontSize"), 14);
 	#ifdef OLD_PLATFORM
@@ -241,7 +235,7 @@ void ZSettings::reloadSettings()
 	cfg_ListFontSize = cfg.readNumEntry(QString("Font"), QString("ListFontSize"), 16);	
 	#endif
 	cfg_GreenShowInfo = cfg.readBoolEntry(QString("Key"), QString("ShowInfoByGreen"), true);
-    cfg_CKill = cfg.readBoolEntry(QString("Key"), QString("KillByC"), false); 
+    cfg_CAction = cfg.readNumEntry(QString("Key"), QString("ActionByC"), 0); 
     
     cfg_TimeInCaption = cfg.readBoolEntry(QString("General"), QString("TimeInCaption"), false); 
 
@@ -270,7 +264,7 @@ void ZSettings::save()
 	cfg.writeEntry("Font", "ListFontSize", cfg_ListFontSize );
 	cfg.writeEntry("Font", "PanelFontSize", cfg_PanelFontSize );
 	cfg.writeEntry("Key", "ShowInfoByGreen", cfg_GreenShowInfo);
-    cfg.writeEntry("Key", "KillByC", cfg_CKill);
+    cfg.writeEntry("Key", "ActionByC", cfg_CAction);
     cfg.writeEntry("General", "TimeInCaption", cfg_TimeInCaption);	
     
     cfg.writeEntry("Font", "UserFont", cfg_UserFont );

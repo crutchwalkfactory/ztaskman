@@ -19,6 +19,7 @@ OK = 确定
 MENU = 选项
 CANCEL = 取消
 SEL = 选择
+NO = 无
 
 MINIALL = 全部最小化
 FLOWPLAYER = 主菜单
@@ -38,7 +39,7 @@ LANG = 语言：
 PANELFONTSIZE = 侧边栏字体大小:
 LISTFONTSIZE = 列表字体大小:
 SHOWINFOGREEN = 显示按绿色按钮任务信息
-KILLC = 杀死按下按钮荤任务
+ACTIONC = 采取的行动按钮C:
 TIMEINCAPTION = 时间在标题
 USEUSERCOLOR = 使用自定义字体颜色
 COLOR = 字体颜色

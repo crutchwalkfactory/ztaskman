@@ -1,6 +1,6 @@
 [Info]
 LNG = Spanish
-AUTHOR = Ant-ON (Translation by Chriiss)
+AUTHOR = Chriiss
 VER= 0.4.2
 
 [Strings]
@@ -19,6 +19,7 @@ OK = OK
 MENU = Menu
 CANCEL = Cancelar
 SEL = Seleccionar
+NO = No
 
 MINIALL = Minimizar todo
 FLOWPLAYER = Menu principal
@@ -38,7 +39,7 @@ LANG = Lenguaje:
 PANELFONTSIZE = Panel de tamaño de letra:
 LISTFONTSIZE = Tamaño de letra de la lista:
 SHOWINFOGREEN = Mostrar informacion de tareas precionando el boton verde
-KILLC = Matar tareas precionando la tecla C
+ACTIONC = La acción de botón C:
 TIMEINCAPTION = Tiempo en el titulo
 USEUSERCOLOR = Usar un color de letra personalizada
 COLOR = Color de letra

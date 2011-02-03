@@ -19,6 +19,7 @@ OK = OK
 MENU = Menu
 CANCEL = Iptal
 SEL = Sec
+NO = Yok
 
 MINIALL = Minimize et
 FLOWPLAYER = Ana menu
@@ -38,7 +39,7 @@ LANG = Dil:
 PANELFONTSIZE = Panel font boyutu:
 LISTFONTSIZE = Liste font boyutu:
 SHOWINFOGREEN = Yesil tus'a basarak gorev bilgisini goster
-KILLC = C tusuna basarak gorevi bitir
+ACTIONC = Düğmesine C Eylem:
 TIMEINCAPTION = Saat baslıgında
 USEUSERCOLOR = kullanın ozel bir yazı tipi rengi
 COLOR = Font сolor

@@ -18,7 +18,7 @@
 #include <ZPressButton.h>
 #include <ZLabel.h>
 #include <ZNumPickerDlg.h>
-#if defined(EZX_ZN5) || defined(EZX_U9) || defined(EZX_Z6W)
+#if CUTED_QT_AND_EZX
 #include <ZColorPickerDlg.h>
 #else
 #include <ZColorControl.h>
@@ -45,8 +45,8 @@ class ZAppSetting : public MyBaseDlg
     ZCheckBox *zcbSendGoToIDLE;
     #endif
     
-    ZCheckBox *zcbKeyGrren;
-    ZCheckBox *zcbKeyC;    
+    ZCheckBox *zcbKeyGrren; 
+    ZComboBox *zcbActionC;
 
     ZLabel *zlLang;
     ZComboBox *zcbLanguage;
@@ -67,6 +67,10 @@ class ZAppSetting : public MyBaseDlg
 	ZCheckBox *zcbCustomFontColor;
 	ZCheckBox *zcbTimeInCaption;
 
+	#ifdef AUTORUN
+	ZCheckBox *zcbDaemon;
+	#endif	
+
 	int fontSize;
 	int fontPanelSize;	
     
@@ -76,6 +80,8 @@ class ZAppSetting : public MyBaseDlg
 	void changeFont();
 	void changePanelFont();
 	void changeFontColor();
+	
+	QString getFullProgramDir();
 };
 
 #endif

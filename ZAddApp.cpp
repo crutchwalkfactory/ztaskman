@@ -24,7 +24,6 @@
 #include <RES_ICON_Reader.h>
 
 extern ZTaskMan *zTaskMan;
-extern ZApplication *app;
 extern ZLng* lng;
 extern ZSettings * settings;
 

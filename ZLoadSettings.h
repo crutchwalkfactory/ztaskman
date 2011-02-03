@@ -71,7 +71,7 @@ public:
 	bool cfg_FiltrProc;
     bool cfg_ShowAppNoWindow;
     bool cfg_GreenShowInfo;
-    bool cfg_CKill;    
+    int cfg_CAction;    
     int cfg_PanelFontSize;	
 	int cfg_ListFontSize;
 	int cfg_DaemonKey;

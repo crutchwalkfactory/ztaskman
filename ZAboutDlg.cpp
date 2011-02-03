@@ -13,22 +13,19 @@
 //
 #include "BaseDlg.h"
 #include "ZAboutDlg.h"
-#include "zTaskMan.h"
 #include "ZDefs.h"
 #include "lng.h"
+#include "ZLoadSettings.h"
 
-#include <qlabel.h>
 #include <qfile.h>
+
 #include <ZApplication.h>
 #include <ZSoftKey.h>
 #include <ZLabel.h>
 #include <ZImage.h>
 #include <ZScrollPanel.h>
 #include <ZSeparator.h>
-#include "ZLoadSettings.h"
 
-extern ZTaskMan *zTaskMan;
-extern ZApplication *app;
 extern ZLng* lng;
 extern ZSettings * settings;
 

@@ -59,7 +59,7 @@
 #define KEY_POWER             0x103f
 #define KEY_VR                0x1035
 
-#ifdef EZX_Z6
+#ifdef OLD_PLATFORM
 #define KEY_MSG_PRESS         1
 #define KEY_MSG_RELEASE       2
 #define KEY_MSG_HOLD          4
@@ -78,7 +78,7 @@
 #define LNG_PATH ProgDir+"/lng/"
 
 // screen size
-#ifndef EZX_E8
+#ifndef GORIZONTAL_SCREEN
 #define SCREEN_WHIDTH 240
 #define SCREEN_HEIGHT 320
 #else
@@ -88,7 +88,7 @@
 
 #define PANEL_WHIDTH 50
 
-#ifndef EZX_E8
+#ifndef GORIZONTAL_SCREEN
 #define GRAPH_LEN 10
 #define GRAPH_WIDTH 200
 #define GRAPH_HEIGHT 50
@@ -104,5 +104,14 @@
 #ifdef OLD_PLATFORM
 #define endsWith(p) right(QString(p).length())==p
 #endif
+
+#if defined(EZX_VE66) || defined(EZX_EM35)
+#define HIDE_PROCESS "!am!zTaskMan!phone!messaging!misc1!windowsserver!xp!"
+#else
+#define HIDE_PROCESS "!am!zTaskMan!phone!messaging!brwdaemon!misc1!windowsserver!vr!addrbk!br!"
+#endif
+
+#define AUTORUN_APPID "456f7618-0000-0000-0000-3106d9a884c2"
+#define AUTORUN_UUID QUuid(QString("{%1}").arg(AUTORUN_APPID))
 
 #endif

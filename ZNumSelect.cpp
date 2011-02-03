@@ -10,15 +10,9 @@
 //
 
 #include "ZNumSelect.h"
-#include "zTaskMan.h"
 #include "lng.h"
-#include "ZDefs.h"
-#include "ZLoadSettings.h"
 
-extern ZTaskMan *zTaskMan;
-extern ZApplication *app;
 extern ZLng* lng;
-extern ZSettings * settings;
 
 ZNumSelect::ZNumSelect(QWidget * perent, QString preText)
 	: ZPopup( ZPopup::DIALOG, perent )

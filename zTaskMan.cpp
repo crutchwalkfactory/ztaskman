@@ -67,7 +67,6 @@
 #define MENU_FIX ""
 #endif
 
-extern ZApplication *app;
 extern ZLng* lng;
 extern ZSettings * settings;
 extern bool isDaemon;
@@ -81,8 +80,6 @@ ZTaskMan::ZTaskMan ( QWidget* parent, const char*, WFlags )
 		QCopChannel::send( SDL_LIB_CHENEL, "hide()" );
 		toLog("Send hide SDL lib");
 	}
-
-    toLog("zTaskMan Channel: "+QString(app->getAppChannelName()));
   
     timer = NULL;
   
@@ -138,34 +135,21 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	QFont font ( qApp->font() ); 
 	font.setPointSize ( settings->cfg_PanelFontSize );
 	
-	#ifdef EZX_E8
-		#define NO_STD_BAR	
-	#ifdef  ALL_VISIBLE_INFO_BAR
-		#define BAR_SEP_SIZE 8
-	#else
-		#define BAR_SEP_SIZE 0	
-	#endif
-	#endif
-
+	WIDGET_PADDING_INFO_T wNoPading; 
+	memset(&wNoPading, 0, sizeof(wNoPading));
+	
 	ZImage * zImg = new ZImage(sp);
 	QPixmap img;
 	img.load( settings->getProgramDir() + "/panel/cpu.png" );
 	zImg->setPixmap(img);
-	#ifndef NO_STD_BAR
 	sp->addChild(zImg, 0, 0);
-	#else
-	sp->addChild(zImg, 5, 3);
-	#endif	
 	
 	CPUFreq = new ZLabel("", sp, "ZLabel");
 	CPUFreq->setFont( font );
 	CPUFreq->setAlignment( ZLabel::AlignHCenter );
 	CPUFreq->setFixedWidth(PANEL_WHIDTH);
-	//CPUFreq->setFixedHeight((settings->cfg_PanelFontSize+1)*4);
 	CPUFreq->setNumLines(2);
 	CPUFreq->setLeading(1);
-	WIDGET_PADDING_INFO_T wNoPading; 
-	memset(&wNoPading, 0, sizeof(wNoPading));
 	CPUFreq->setPadding(wNoPading);
 	sp->addChild(CPUFreq, 0, zImg->y()+zImg->height()+1);
 	
@@ -177,11 +161,8 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	zImg = new ZImage(sp);
 	img.load(settings->getProgramDir() + "/panel/ram.png"  );
 	zImg->setPixmap(img);
-	#ifndef NO_STD_BAR
 	sp->addChild(zImg, 0, 80);
-	#else
-	sp->addChild(zImg, 3, 79+BAR_SEP_SIZE);
-	#endif
+
  	
 	RAM = new ZLabel("", sp, "ZLabel");
 	RAM->setFixedWidth( PANEL_WHIDTH );
@@ -199,10 +180,10 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	zImg = new ZImage(sp);
 	img.load(settings->getProgramDir() + "/panel/swap.png"  );
 	zImg->setPixmap(img);
-	#ifndef NO_STD_BAR
+	#ifndef GORIZONTAL_SCREEN
 	sp->addChild(zImg, 0, 155);
 	#else
-	sp->addChild(zImg, 2, 115+BAR_SEP_SIZE*2);
+	sp->addChild(zImg, 0, 118);
 	#endif
 
 	SWAP = new ZLabel("", sp, "ZLabel");
@@ -219,11 +200,7 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	sp->addChild(imgSWAP, zImg->x(), zImg->y()+zImg->height()-imgSWAP->height());
 	
 	lbApp = new ZListBox ( QString ( "%I%M" ), this, 0);
-	#ifndef ALL_VISIBLE_INFO_BAR  
 	lbApp->setFixedWidth ( SCREEN_WHIDTH ); 
-	#else
-	lbApp->setFixedWidth ( SCREEN_WHIDTH-PANEL_WHIDTH ); 
-	#endif
 	
 	#ifdef OLD_PLATFORM
 	sv->setMargins(0,0,0,0);
@@ -246,26 +223,12 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	}
 
 	tabWidget->stopNextWhenKeyRepeat(true);
-	
-	#ifndef ALL_VISIBLE_INFO_BAR
 	tabWidget->addTab(sv, QIconSet(imgTab1), "");
 	
 	setContentWidget ( tabWidget );
 	
 	sv->addChild(lbProc, 0, 0);
 	sv->addChild(sp, SCREEN_WHIDTH-PANEL_WHIDTH, 0);
-	#else
-	tabWidget->addTab(lbProc, QIconSet(imgTab1), "");	
-	tabWidget->setFixedWidth ( SCREEN_WHIDTH-PANEL_WHIDTH );
-	
-	setContentWidget ( sv );
-	
-	tabWidget->setFixedHeight ( sv->height() ); 
-	lbProc->setFixedHeight( sv->height()-(headerSize().height()-4) );
-
-	sv->addChild(tabWidget, 0, 0);
-	sv->addChild(sp, SCREEN_WHIDTH-PANEL_WHIDTH, 0);	
-	#endif
 	
 	tabWidget->addTab(lbApp, QIconSet(imgTab2), "");
 	
@@ -290,7 +253,7 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	label->setFont( font );
 	imgGraphSwap = new ZImage(gp);
 	imgGraphSwap->setPixmap(*pix);
-	#ifndef EZX_E8
+	#ifndef GORIZONTAL_SCREEN
 	gp->addChild(label, 12, 20+GRAPH_HEIGHT+20+GRAPH_HEIGHT);	
 	gp->addChild(imgGraphSwap, 10, 20+GRAPH_HEIGHT+20+GRAPH_HEIGHT+20);
 	#else
@@ -386,7 +349,6 @@ void ZTaskMan::showInfo()
 
 void ZTaskMan::drawGraph(ZImage * img, int array[GRAPH_LEN], const QColor & color, bool fix)
 {
-	toLog("drawGraph");
 	QPixmap * pix = new QPixmap(GRAPH_WIDTH,GRAPH_HEIGHT);
 	pix->fill(Qt::black);
 	QPainter * paint = new QPainter (pix);
@@ -418,7 +380,7 @@ void ZTaskMan::drawGraph(ZImage * img, int array[GRAPH_LEN], const QColor & colo
 				array[n] = old;
 			else
 				old = array[n];
-		paint->lineTo((GRAPH_WIDTH/(GRAPH_LEN-1))*i,GRAPH_HEIGHT+1-array[n]/(100/(GRAPH_HEIGHT-1)));
+		paint->lineTo((GRAPH_WIDTH/(GRAPH_LEN-1))*i,GRAPH_HEIGHT-((double)(GRAPH_HEIGHT-1)/100)*array[n]);
 	}
 	img->setPixmap(*pix);
 	img->update();
@@ -452,7 +414,7 @@ void ZTaskMan::slotUpdate()
 	{
 		drawGraph(imgGraphProc, proc_graph, Qt::green, false);
 		drawGraph(imgGraphMem,  mem_graph,  Qt::red);
-		#if !(defined(EZX_ZN5) || defined(EZX_U9) || defined(EZX_Z6W))
+		#ifndef CUTED_QT_AND_EZX
 		drawGraph(imgGraphSwap, swap_graph, Qt::yellow);
 		#else
 		drawGraph(imgGraphSwap, swap_graph, Qt::blue); // On ZN5 no yellow const in libqte-mt(
@@ -810,9 +772,7 @@ void ZTaskMan::buildJavaListNew()
 	AM_RESULT_CODE_T result = AM_LauncherClient::getAppStates(AM_AppLnk::JavaApp, runJavaList);
 	if ( result == AM_RESULT_SUCCESS )
 	{
-		toLog("@ Java list geted!");
-		
-		toLog("Java in list"+QString::number(runJavaList.count()));
+		toLog("@ Java list geted! Count item: "+QString::number(runJavaList.count()));
 		
 		ZConfig confCARD ( CARD_REGISTRY, false );
 		ZConfig conINSTALL ( INSTALLED_DB, false );
@@ -1464,8 +1424,20 @@ bool ZTaskMan::eventFilter(QObject* o, QEvent* pEvent)
 	   {
 			if ( settings->cfg_GreenShowInfo && pKey->key() == KEY_GREEN )
 				menu_procInfo();
-			if ( settings->cfg_CKill && pKey->key() == KEY_C )
-				menu_procKill();
+			if ( pKey->key() == KEY_C )
+			{
+				switch (settings->cfg_CAction)
+				{
+					case 1:
+						menu_procKill();
+						break;
+					case 2:
+						menu_procQuit();
+						break;
+					default:
+						break;
+				}
+			}
 	   }
 	} 
 	#ifndef NO_SHOW_GRAPH

@@ -14,7 +14,7 @@
 
 //EZX
 #include <ZPopup.h>
-#if defined(EZX_Z6)||defined(EZX_V8)
+#ifdef OLD_PLATFORM
 #include <ZSlider.h>
 #else
 #include <ZSliderModule.h>
