@@ -41,9 +41,11 @@ ZAppSetting::ZAppSetting()
 	toLog("ZSettingDlg: Create CheckBox and Load settings");
 	
 	ZConfig cfg(appConf);
-
+	ZSeparator* sep;
+	
+	//++++++++++++++++++++
 	#ifdef AUTORUN
-	zcbDaemon = new ZCheckBox("Daemon",form);
+	zcbDaemon = new ZCheckBox(lng->getString("DAEMON"),form);
 	zcbDaemon->setChecked(false);
 	form->addChild(zcbDaemon);
 
@@ -53,23 +55,42 @@ ZAppSetting::ZAppSetting()
 	QStringList::Iterator it = list.find(AUTORUN_APPID);
 	if ( list.end() != it )
 		zcbDaemon->setChecked(true);
+	
+	sep = new ZSeparator();
+	form->addChild(sep);
 	#endif
-
+	//++++++++++++++++++++
 	zcbFiltrProc = new ZCheckBox(lng->getString("PROCFILTER"),form);
+	zcbFiltrProc->setChecked(!settings->cfg_FiltrProc);
+	form->addChild(zcbFiltrProc);
+	
 	zcbTaskNoWin = new ZCheckBox(lng->getString("TASKNOWIN"),form);
+	zcbTaskNoWin->setChecked(settings->cfg_ShowAppNoWindow);
+	form->addChild(zcbTaskNoWin);
+	
+	zcbTimeInCaption = new ZCheckBox(lng->getString("TIMEINCAPTION"),form);
+	zcbTimeInCaption->setChecked(settings->cfg_TimeInCaption);		
+	form->addChild(zcbTimeInCaption);
+	
+	sep = new ZSeparator();
+	form->addChild(sep);	
+	//++++++++++++++++++++
 	#ifdef RAISE_PHONE
 	zcbSendReasePhone = new ZCheckBox(lng->getString("SENDREASEPHONE"),form);
-	zcbSendGoToIDLE = new ZCheckBox(lng->getString("SENDTOIDLE"),form);
-	#endif
-    zcbKeyGrren = new ZCheckBox(lng->getString("SHOWINFOGREEN"),form);
-
-	zcbFiltrProc->setChecked(!settings->cfg_FiltrProc);
-	zcbTaskNoWin->setChecked(settings->cfg_ShowAppNoWindow);
-	#ifdef RAISE_PHONE
 	zcbSendReasePhone->setChecked(settings->cfg_SendReaisePhone);
+	form->addChild(zcbSendReasePhone);
+	
+	zcbSendGoToIDLE = new ZCheckBox(lng->getString("SENDTOIDLE"),form);
 	zcbSendGoToIDLE->setChecked(settings->cfg_SendGoToIDLE);
+	form->addChild(zcbSendGoToIDLE);
+	
+	sep = new ZSeparator();
+	form->addChild(sep);	
 	#endif
+	//++++++++++++++++++++
+    zcbKeyGrren = new ZCheckBox(lng->getString("SHOWINFOGREEN"),form);
     zcbKeyGrren->setChecked(settings->cfg_GreenShowInfo);
+    form->addChild(zcbKeyGrren);
     
 	zcbActionC = new ZComboBox(false, form);
 	zcbActionC->setTitle(lng->getString("ACTIONC"));
@@ -77,62 +98,30 @@ ZAppSetting::ZAppSetting()
 	zcbActionC->insertItem(lng->getString("KILL"));
 	zcbActionC->insertItem(lng->getString("QUIT"));
 	zcbActionC->setCurrentItem(settings->cfg_CAction);
-
+	form->addChild(zcbActionC);
+	
+	sep = new ZSeparator();
+	form->addChild(sep);	
+	//++++++++++++++++++++
 	zcbLanguage = new ZComboBox(false, form);
 	zcbLanguage->setTitle(lng->getString("LANG"));
 	lng->getLngList(zcbLanguage, lng->getCurrentLng());	
-
+	form->addChild(zcbLanguage);
+	
+	sep = new ZSeparator();
+	form->addChild(sep);	
+	//++++++++++++++++++++
 	fontSize = settings->cfg_ListFontSize;
 	zpbFontSize = new ZPressButton( form );
 	zpbFontSize->setTitle( lng->getString("LISTFONTSIZE") );
 	zpbFontSize->setText(QString::number(fontSize));
 	connect ( zpbFontSize, SIGNAL ( clicked() ), this, SLOT ( changeFont() ) );
-
+	
 	fontPanelSize = settings->cfg_PanelFontSize;
 	zpbPanelFontSize = new ZPressButton( form );
 	zpbPanelFontSize->setTitle( lng->getString("PANELFONTSIZE") );
 	zpbPanelFontSize->setText(QString::number(fontPanelSize));
 	connect ( zpbPanelFontSize, SIGNAL ( clicked() ), this, SLOT ( changePanelFont() ) );	
-	
-	zcbCustomFontColor = new ZCheckBox(lng->getString("USEUSERCOLOR"),form);
-	zcbCustomFontColor->setChecked(settings->cfg_UserFont);
-	
-	#if defined(EZX_ZN5) || defined(EZX_U9) || defined(EZX_Z6W)
-	fontColor = settings->cfg_FontColor;
-	zpbFontColor = new ZPressButton( form );
-	zpbFontColor->setTitle( lng->getString("COLOR") );
-	zpbFontColor->setText("###");
-	zpbFontColor->setFontColor(fontColor);
-	connect ( zpbFontColor, SIGNAL ( clicked() ), this, SLOT ( changeFontColor() ) );		
-	#else
-	zccFontColor = new ZColorControl( settings->cfg_FontColor );
-	zccFontColor->setCaption( lng->getString("COLOR") );
-	#endif
-	
-	zcbTimeInCaption = new ZCheckBox(lng->getString("TIMEINCAPTION"),form);
-	zcbTimeInCaption->setChecked(settings->cfg_TimeInCaption);	
-	
-	toLog("ZSettingDlg: init interfase");
-
-	form->addChild(zcbFiltrProc);
-	form->addChild(zcbTaskNoWin);
-	form->addChild(zcbTimeInCaption);
-	ZSeparator* sep = new ZSeparator();
-	#ifdef RAISE_PHONE
-	form->addChild(sep);
-	form->addChild(zcbSendReasePhone);
-	form->addChild(zcbSendGoToIDLE);
-	sep = new ZSeparator();
-	#endif
-	form->addChild(sep);
-	form->addChild(zcbKeyGrren);
-	form->addChild(zcbActionC);
-	sep = new ZSeparator();
-	form->addChild(sep);	
-	form->addChild(zcbLanguage);
-
-	sep = new ZSeparator();
-	form->addChild(sep);
 
 	#ifdef FIX_FORMCONTAINER
 	form->addChild( (ZWidget*)zpbFontSize );
@@ -141,11 +130,23 @@ ZAppSetting::ZAppSetting()
 	form->addChild( zpbFontSize );
 	form->addChild( zpbPanelFontSize );	
 	#endif
+	
+	zcbCustomFontColor = new ZCheckBox(lng->getString("USEUSERCOLOR"),form);
+	zcbCustomFontColor->setChecked(settings->cfg_UserFont);
 	form->addChild( zcbCustomFontColor );
+	
 	#ifdef CUTED_QT_AND_EZX
-	form->addChild( zpbFontColor );	
+	fontColor = settings->cfg_FontColor;
+	zpbFontColor = new ZPressButton( form );
+	zpbFontColor->setTitle( lng->getString("COLOR") );
+	zpbFontColor->setText("###");
+	zpbFontColor->setFontColor(fontColor);
+	connect ( zpbFontColor, SIGNAL ( clicked() ), this, SLOT ( changeFontColor() ) );
+	form->addChild( zpbFontColor );			
 	#else
-	form->addChild( zccFontColor );		
+	zccFontColor = new ZColorControl( settings->cfg_FontColor );
+	zccFontColor->setCaption( lng->getString("COLOR") );
+	form->addChild( zccFontColor );	
 	#endif
 	
 	ZSoftKey *softKey  = new ZSoftKey(NULL, this, this);

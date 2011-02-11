@@ -47,4 +47,5 @@ COLOR = Font сolor
 LOADLIB = Kullanilan Libs'ler :
 THREADS = Konuları
 RUNUSER = Koşmak adına
+DAEMON = Başladığında telefon güç (Daemon)
 

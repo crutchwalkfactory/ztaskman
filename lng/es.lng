@@ -47,4 +47,4 @@ COLOR = Color de letra
 LOADLIB = Librerias utilizadas:
 THREADS = Temas
 RUNUSER = Uid
-
+DAEMON = Comienza cuando la energía en el teléfono (demonio)

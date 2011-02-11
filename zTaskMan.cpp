@@ -105,9 +105,7 @@ ZTaskMan::~ZTaskMan()
 }
 
 void ZTaskMan::CreateWindow ( QWidget* )
-{
-	qApp->installEventFilter( this );
-      	
+{  	
 	//************************** interface *****************************	
 	toLog(QString("CreateWindow: interface"));
 	setMainWidgetTitle ( "zTaskMan" );
@@ -144,7 +142,7 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	zImg->setPixmap(img);
 	sp->addChild(zImg, 0, 0);
 	
-	CPUFreq = new ZLabel("", sp, "ZLabel");
+	CPUFreq = new ZLabel("", sp);
 	CPUFreq->setFont( font );
 	CPUFreq->setAlignment( ZLabel::AlignHCenter );
 	CPUFreq->setFixedWidth(PANEL_WHIDTH);
@@ -164,7 +162,7 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	sp->addChild(zImg, 0, 80);
 
  	
-	RAM = new ZLabel("", sp, "ZLabel");
+	RAM = new ZLabel("", sp);
 	RAM->setFixedWidth( PANEL_WHIDTH );
 	RAM->setFont( font );
 	RAM->setAlignment( ZLabel::AlignHCenter );
@@ -186,7 +184,7 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	sp->addChild(zImg, 0, 118);
 	#endif
 
-	SWAP = new ZLabel("", sp, "ZLabel");
+	SWAP = new ZLabel("", sp);
 	SWAP->setFixedWidth( PANEL_WHIDTH );
 	SWAP->setFont( font );
 	SWAP->setAlignment( ZLabel::AlignHCenter );
@@ -234,25 +232,27 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	
     #ifndef NO_SHOW_GRAPH
 	gp = new ZScrollPanel();
-	ZLabel * label = new ZLabel("CPU", gp, "ZLabel");
+	ZLabel * label = new ZLabel("CPU", gp);
 	label->setFont( font );
+	if ( settings->cfg_UserFont )
+		label->setFontColor(settings->cfg_FontColor);
     imgGraphProc = new ZImage(gp);
-    QPixmap * pix = new QPixmap(GRAPH_WIDTH,GRAPH_HEIGHT);
-    imgGraphProc->setPixmap(*pix);
 	gp->addChild(label, 12, 0);    
     gp->addChild(imgGraphProc, 10, 20);
     
-	label = new ZLabel("RAM", gp, "ZLabel");
+	label = new ZLabel("RAM", gp);
 	label->setFont( font );
+	if ( settings->cfg_UserFont )
+		label->setFontColor(settings->cfg_FontColor);
 	imgGraphMem = new ZImage(gp);
-	imgGraphMem->setPixmap(*pix);
 	gp->addChild(label, 12, 20+GRAPH_HEIGHT);   	
 	gp->addChild(imgGraphMem, 10, 20+GRAPH_HEIGHT+20);
 	
-	label = new ZLabel("SWAP", gp, "ZLabel");
+	label = new ZLabel("SWAP", gp);
 	label->setFont( font );
+	if ( settings->cfg_UserFont )
+		label->setFontColor(settings->cfg_FontColor);
 	imgGraphSwap = new ZImage(gp);
-	imgGraphSwap->setPixmap(*pix);
 	#ifndef GORIZONTAL_SCREEN
 	gp->addChild(label, 12, 20+GRAPH_HEIGHT+20+GRAPH_HEIGHT);	
 	gp->addChild(imgGraphSwap, 10, 20+GRAPH_HEIGHT+20+GRAPH_HEIGHT+20);
@@ -291,12 +291,14 @@ void ZTaskMan::CreateWindow ( QWidget* )
 	toLog("CreateWindow: SIGNAL");
 	connect ( lbApp, SIGNAL ( selected ( int ) ), this, SLOT ( lbAppSel ( int ) ) );
 	connect ( lbProc, SIGNAL ( selected ( int ) ), this, SLOT ( lbProcSel ( int ) ) );
+	connect(tabWidget,SIGNAL(currentChanged(QWidget* )),this,SLOT(slotPageChanged(QWidget* )));	
 	connect( qApp, SIGNAL(signalRaise()), this, SLOT(slotRaise()) );
 	connect( qApp, SIGNAL(askReturnToIdle(int)), this, SLOT(slotReturnToIdle(int)) );
-	connect(tabWidget,SIGNAL(currentChanged(QWidget* )),this,SLOT(slotPageChanged(QWidget* )));	
 	
 	showList();
 	showInfo();
+	
+	qApp->installEventFilter( this );
 	
 	toLog(QString("CreateWindow: end"));
 }
@@ -1551,7 +1553,10 @@ void ZTaskMan::Quit()
 {
 	if ( isDaemon )
 	{
-		hide();
+		this->hide();
+		qApp->removeEventFilter( this );
+		disconnect( qApp, SIGNAL(signalRaise()), this, SLOT(slotRaise()) );
+		disconnect( qApp, SIGNAL(askReturnToIdle(int)), this, SLOT(slotReturnToIdle(int)) );
 		//Stop update info (free mem, cpu freq and etc)
 		delete timer;
 		timer = NULL;
@@ -1575,12 +1580,18 @@ void ZTaskMan::Show()
 {
 	if ( isHidden() )
 	{
-		show();
+		qApp->installEventFilter( this );
+		connect( qApp, SIGNAL(signalRaise()), this, SLOT(slotRaise()) );
+		connect( qApp, SIGNAL(askReturnToIdle(int)), this, SLOT(slotReturnToIdle(int)) );
+		this->show();
 		tabWidget->setCurrentPage(0);
 		showList();
 		showInfo();
 	} else
-		show();		
+	{
+		this->hide();
+		this->show();
+	}	
 }
 
 void ZTaskMan::setTimeToCaption()

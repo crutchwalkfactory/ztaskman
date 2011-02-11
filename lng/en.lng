@@ -47,4 +47,4 @@ COLOR = Font сolor
 LOADLIB = Libs used:
 THREADS = Threads
 RUNUSER = Uid
-
+DAEMON = Starts when power on phone (Daemon)

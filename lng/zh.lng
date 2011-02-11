@@ -47,4 +47,5 @@ COLOR = 字体颜色
 LOADLIB = 已加载的lib:
 THREADS = 供稿
 RUNUSER = 运行代表
+DAEMON = 开机自启动
 
