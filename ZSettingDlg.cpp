@@ -142,7 +142,7 @@ ZAppSetting::ZAppSetting()
 	zpbFontColor->setText("###");
 	zpbFontColor->setFontColor(fontColor);
 	connect ( zpbFontColor, SIGNAL ( clicked() ), this, SLOT ( changeFontColor() ) );
-	form->addChild( zpbFontColor );			
+	form->addChild( zpbFontColor );		
 	#else
 	zccFontColor = new ZColorControl( settings->cfg_FontColor );
 	zccFontColor->setCaption( lng->getString("COLOR") );
@@ -182,7 +182,7 @@ void ZAppSetting::accept()
 	
 	settings->cfg_UserFont = zcbCustomFontColor->isChecked();
 	settings->cfg_TimeInCaption = zcbTimeInCaption->isChecked();
-	#if CUTED_QT
+	#ifdef CUTED_QT_AND_EZX
 	settings->cfg_FontColor = fontColor;
 	#else
 	settings->cfg_FontColor = zccFontColor->getColor();

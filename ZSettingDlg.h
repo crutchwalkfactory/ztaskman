@@ -57,7 +57,7 @@ class ZAppSetting : public MyBaseDlg
     ZLabel *zlPanelFont;	
 	ZPressButton *zpbPanelFontSize;	
 	
-	#if defined(EZX_ZN5) || defined(EZX_U9) || defined(EZX_Z6W)
+	#ifdef CUTED_QT_AND_EZX
 	ZPressButton *zpbFontColor;	
 	QColor fontColor;
 	#else

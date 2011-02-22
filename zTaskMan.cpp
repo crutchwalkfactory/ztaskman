@@ -1110,6 +1110,13 @@ void ZTaskMan::menu_appSetting()
 			CPUFreq->setFontColor(settings->cfg_FontColor);
 			RAM->setFontColor(settings->cfg_FontColor);
 			SWAP->setFontColor(settings->cfg_FontColor);
+		} else
+		{
+			#ifdef NEW_PLATFORM
+			CPUFreq->updateLabelSkin();
+			RAM->updateLabelSkin();
+			SWAP->updateLabelSkin();
+			#endif			
 		}
 		
 		buildProcList();
