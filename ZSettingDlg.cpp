@@ -259,7 +259,11 @@ QString ZAppSetting::getFullProgramDir()
 {
 	QString ProgDir = lng->ProgDir;
 	if ( ProgDir[0]=='.' )
+	#ifndef CUTED_QT_AND_EZX
 		ProgDir = QDir::current().absPath() + ProgDir.right(ProgDir.length()-1);
+	#else
+		ProgDir = QDir(QDir::currentDirPath()).absPath() + ProgDir.right(ProgDir.length()-1);	
+	#endif
 	return ProgDir;
 }
 

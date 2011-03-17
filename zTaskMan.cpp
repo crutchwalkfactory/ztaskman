@@ -1166,18 +1166,19 @@ void ZTaskMan::addProc(uint pid, QString nameProc, bool cmd )
 		QString picName;
 		
 		int n = nameProc.find("-launch");
-		if ( n > -1 )
+		if ( n >= 0 )
 		{
 			//Get java id from run line
 			nameProc.remove(0,n+7);
 			while ( nameProc[0]==' ' )
 				nameProc.remove(0,1);
 			n = nameProc.find(" ");
-			if ( n > -1 )
+			if ( n >=0 )
 				nameProc.remove(n,nameProc.length());		
 			//Fix java id, if need		
 			while ( nameProc.length() < 5 )
 				nameProc = "0"+nameProc;
+				
 			//Set pixmap and name
 			picName = "/mmc/mmca1/.system/"+ settings->JavaFolderInSD +"/DownloadApps/MIDlet"+nameProc+"/Files/MIDlet-1.png" ;
 			if ( !QFile::exists(picName) )
@@ -1185,12 +1186,13 @@ void ZTaskMan::addProc(uint pid, QString nameProc, bool cmd )
 				picName = "/ezxlocal/download/mystuff/.system/java/DownloadApps/MIDlet"+nameProc+"/Files/MIDlet-1.png";
 				if ( !QFile::exists(picName) )
 					picName = "/ezxlocal/download/mystuff/.system/java/SystemApps/MIDlet"+nameProc+"/Files/MIDlet-1.png";
-			}				
+			}	
 			toLog("LoadIMG: "+picName);
+			pm.load( picName );
 			picName = settings->mapJava[nameProc];
 			if ( picName.length() == 0 )
 				picName = "Java ID:'"+nameProc+"'";
-			listitem->appendSubItem( 1, QString::fromUtf8(picName));					
+			listitem->appendSubItem( 1, QString::fromUtf8(picName), true);					
 		}
 		
 		if ( pm.isNull() )
@@ -1250,6 +1252,11 @@ void ZTaskMan::addProc(uint pid, QString nameProc, bool cmd )
 
 QString ZTaskMan::extractExecName(QString nameProc)
 {
+	#ifndef NEW_JAVA_LIST
+	if ( nameProc.find("kvm") >= 0 )
+		return nameProc;
+	#endif
+	
 	while ( nameProc.find("/lib/")>=0 )
 		nameProc.remove(1, nameProc.find(" ") );
 	

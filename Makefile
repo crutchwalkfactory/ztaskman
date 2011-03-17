@@ -127,7 +127,7 @@ LD	    =	$(TOOLPREFIX)/bin/arm-linux-gnueabi-g++
 STRIP   =   $(TOOLPREFIX)/bin/arm-linux-strip
 CFLAGS	=	-pipe -Wall -W -O2 -DNO_DEBUG $(DIRECTIV) $(INCPATH) -march=armv6j -mtune=arm1136jf-s -Os $(FLAGS_CUSTOM)
 CXXFLAGS=	-pipe -DQWS -fno-exceptions -fno-rtti -Wall -W -DNO_DEBUG $(DIRECTIV) $(INCPATH) -march=armv6j -mtune=arm1136jf-s -Os $(FLAGS_CUSTOM) 
-INCPATH	=	-I$(QTDIR)/include -I$(EZXDIR)/include -I$(EZXDIR2)/include -I $(TOOLPREFIX)/arm-linux-gnueabi/include
+INCPATH	=	-I$(QTDIR)/include -I$(EZXDIR)/include -I$(EZXDIR2)/include -I$(TOOLPREFIX)/arm-linux-gnueabi/include
 LDFLAGS	=	-s
 LINK	=	$(TOOLPREFIX)/bin/arm-linux-gnueabi-gcc
 LFLAGS	=	-Wl,-rpath-link,$(EZXDIR)/lib $(FLAGS_CUSTOM)

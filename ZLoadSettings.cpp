@@ -194,7 +194,7 @@ void ZSettings::loadAppDB()
 	#ifndef NEW_JAVA_LIST
 	//********************* Build list of java name ********************
 	toLog("Build list of java name");
-	
+
 	mapJava.clear();
 	
 	if ( JavaFolderInSD != NULL )
