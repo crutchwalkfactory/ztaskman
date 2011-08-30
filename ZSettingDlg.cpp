@@ -16,12 +16,10 @@
 #include "ZLoadSettings.h"
 #include "ZDefs.h"
 #include "ZUtils.h"
+#include "ZOptionItem.h"
 
 #include <ZSoftKey.h>
-#include <ZFormContainer.h>
 #include <ZConfig.h>
-#include <ZSeparator.h>
-#include <ZComboBox.h>
 
 #include <qdir.h>
 
@@ -35,126 +33,115 @@ ZAppSetting::ZAppSetting()
 	
 	setMainWidgetTitle(lng->getString("DLG_SETTING"));
 	
-	ZFormContainer *form = new ZFormContainer(this, 0, ZSkinService::clsZFormContainer);
-	this->setContentWidget(form);
+	zlbSettings = new ZListBox(this);
+	this->setContentWidget(zlbSettings);
 
 	toLog("ZSettingDlg: Create CheckBox and Load settings");
 	
-	ZConfig cfg(appConf);
-	ZSeparator* sep;
+	ZOptionItem * item;
 	
 	//++++++++++++++++++++
 	#ifdef AUTORUN
-	zcbDaemon = new ZCheckBox(lng->getString("DAEMON"),form);
-	zcbDaemon->setChecked(false);
-	form->addChild(zcbDaemon);
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_BOOL_ONOFF, 0);
+	item->setTitle(lng->getString("DAEMON"));
+	item->setNum(false);
+	zlbSettings->insertItem ( item,-1 );
 
 	ZConfig config("/ezxlocal/download/appwrite/am/UserConfig");
 	QString sAutoRunApps = config.readEntry("AutoRun", "Apps");
 	QStringList list = QStringList::split( ';', sAutoRunApps);
 	QStringList::Iterator it = list.find(AUTORUN_APPID);
 	if ( list.end() != it )
-		zcbDaemon->setChecked(true);
-	
-	sep = new ZSeparator();
-	form->addChild(sep);
+		item->setNum(true);
 	#endif
 	//++++++++++++++++++++
-	zcbFiltrProc = new ZCheckBox(lng->getString("PROCFILTER"),form);
-	zcbFiltrProc->setChecked(!settings->cfg_FiltrProc);
-	form->addChild(zcbFiltrProc);
 	
-	zcbTaskNoWin = new ZCheckBox(lng->getString("TASKNOWIN"),form);
-	zcbTaskNoWin->setChecked(settings->cfg_ShowAppNoWindow);
-	form->addChild(zcbTaskNoWin);
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_BOOL_ONOFF, 1);
+	item->setTitle(lng->getString("PROCFILTER"));
+	item->read(APP_CONF_NAME, "Task", "ShowAllTask", false);
+	zlbSettings->insertItem ( item,-1 );	
+
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_BOOL_ONOFF, 2);
+	item->setTitle(lng->getString("TASKNOWIN"));
+	item->read(APP_CONF_NAME, "Task", "ShowAppNoWindow", false);
+	zlbSettings->insertItem ( item,-1 );	
+
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_BOOL_ONOFF, 3);
+	item->setTitle(lng->getString("TIMEINCAPTION"));
+	item->read(APP_CONF_NAME, "General", "TimeInCaption", false);
+	zlbSettings->insertItem ( item,-1 );		
 	
-	zcbTimeInCaption = new ZCheckBox(lng->getString("TIMEINCAPTION"),form);
-	zcbTimeInCaption->setChecked(settings->cfg_TimeInCaption);		
-	form->addChild(zcbTimeInCaption);
-	
-	sep = new ZSeparator();
-	form->addChild(sep);	
 	//++++++++++++++++++++
 	#ifdef RAISE_PHONE
-	zcbSendReasePhone = new ZCheckBox(lng->getString("SENDREASEPHONE"),form);
-	zcbSendReasePhone->setChecked(settings->cfg_SendReaisePhone);
-	form->addChild(zcbSendReasePhone);
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_BOOL_ONOFF, 4);
+	item->setTitle(lng->getString("SENDREASEPHONE"));
+	item->read(APP_CONF_NAME, "Task", "SendReaisePhone", true);
+	zlbSettings->insertItem ( item,-1 );		
 	
-	zcbSendGoToIDLE = new ZCheckBox(lng->getString("SENDTOIDLE"),form);
-	zcbSendGoToIDLE->setChecked(settings->cfg_SendGoToIDLE);
-	form->addChild(zcbSendGoToIDLE);
 	
-	sep = new ZSeparator();
-	form->addChild(sep);	
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_BOOL_ONOFF, 5);
+	item->setTitle(lng->getString("SENDTOIDLE"));
+	item->read(APP_CONF_NAME, "Task", "SendGoToIDLE", false);
+	zlbSettings->insertItem ( item,-1 );
 	#endif
-	//++++++++++++++++++++
-    zcbKeyGrren = new ZCheckBox(lng->getString("SHOWINFOGREEN"),form);
-    zcbKeyGrren->setChecked(settings->cfg_GreenShowInfo);
-    form->addChild(zcbKeyGrren);
-    
-	zcbActionC = new ZComboBox(false, form);
-	zcbActionC->setTitle(lng->getString("ACTIONC"));
-    zcbActionC->insertItem(lng->getString("NO"));
-	zcbActionC->insertItem(lng->getString("KILL"));
-	zcbActionC->insertItem(lng->getString("QUIT"));
-	zcbActionC->setCurrentItem(settings->cfg_CAction);
-	form->addChild(zcbActionC);
 	
-	sep = new ZSeparator();
-	form->addChild(sep);	
 	//++++++++++++++++++++
-	zcbLanguage = new ZComboBox(false, form);
-	zcbLanguage->setTitle(lng->getString("LANG"));
-	lng->getLngList(zcbLanguage, lng->getCurrentLng());	
-	form->addChild(zcbLanguage);
-	
-	sep = new ZSeparator();
-	form->addChild(sep);	
-	//++++++++++++++++++++
-	fontSize = settings->cfg_ListFontSize;
-	zpbFontSize = new ZPressButton( form );
-	zpbFontSize->setTitle( lng->getString("LISTFONTSIZE") );
-	zpbFontSize->setText(QString::number(fontSize));
-	connect ( zpbFontSize, SIGNAL ( clicked() ), this, SLOT ( changeFont() ) );
-	
-	fontPanelSize = settings->cfg_PanelFontSize;
-	zpbPanelFontSize = new ZPressButton( form );
-	zpbPanelFontSize->setTitle( lng->getString("PANELFONTSIZE") );
-	zpbPanelFontSize->setText(QString::number(fontPanelSize));
-	connect ( zpbPanelFontSize, SIGNAL ( clicked() ), this, SLOT ( changePanelFont() ) );	
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_BOOL_ONOFF, 6);
+	item->setTitle(lng->getString("SHOWINFOGREEN"));
+	item->read(APP_CONF_NAME, "Key", "ShowInfoByGreen", true);
+	zlbSettings->insertItem ( item,-1 );
 
-	#ifdef FIX_FORMCONTAINER
-	form->addChild( (ZWidget*)zpbFontSize );
-	form->addChild( (ZWidget*)zpbPanelFontSize );
-	#else
-	form->addChild( zpbFontSize );
-	form->addChild( zpbPanelFontSize );	
-	#endif
+	QStringList * qslActionC = new QStringList();
+    qslActionC->append(lng->getString("NO"));
+	qslActionC->append(lng->getString("KILL"));
+	qslActionC->append(lng->getString("QUIT"));
 	
-	zcbCustomFontColor = new ZCheckBox(lng->getString("USEUSERCOLOR"),form);
-	zcbCustomFontColor->setChecked(settings->cfg_UserFont);
-	form->addChild( zcbCustomFontColor );
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_ONE_OF_LIST, 7);
+	item->setTitle(lng->getString("ACTIONC"));
+	item->setList( qslActionC );
+	item->read(APP_CONF_NAME, "Key", "ActionOnC", 0);
+	zlbSettings->insertItem ( item,-1 );	
 	
-	#ifdef CUTED_QT_AND_EZX
-	fontColor = settings->cfg_FontColor;
-	zpbFontColor = new ZPressButton( form );
-	zpbFontColor->setTitle( lng->getString("COLOR") );
-	zpbFontColor->setText("###");
-	zpbFontColor->setFontColor(fontColor);
-	connect ( zpbFontColor, SIGNAL ( clicked() ), this, SLOT ( changeFontColor() ) );
-	form->addChild( zpbFontColor );		
-	#else
-	zccFontColor = new ZColorControl( settings->cfg_FontColor );
-	zccFontColor->setCaption( lng->getString("COLOR") );
-	form->addChild( zccFontColor );	
+	//++++++++++++++++++++
+	QStringList * qslLangList = new QStringList();
+	int iCur = lng->getLngList( qslLangList );
+	
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_ONE_OF_LIST, 8);
+	item->setTitle(lng->getString("LANG"));
+	item->setList( qslLangList );
+	item->setNum( iCur );
+	zlbSettings->insertItem ( item,-1 );
+	
+	//++++++++++++++++++++
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_NUM, 9);
+	item->setTitle(lng->getString("LISTFONTSIZE"));
+	item->setMaxMin(30, 6);	
+	item->read(APP_CONF_NAME, "Font", "ListFontSize", 16);
+	zlbSettings->insertItem ( item,-1 );	
+	
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_NUM, 10);
+	item->setTitle(lng->getString("PANELFONTSIZE"));
+	item->setMaxMin(30, 6);	
+	item->read(APP_CONF_NAME, "Font", "PanelFontSize", 14);
+	zlbSettings->insertItem ( item,-1 );
+	
+	#ifndef NO_CHANGE_COLOR	
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_BOOL_ONOFF, 11);
+	item->setTitle(lng->getString("USEUSERCOLOR"));
+	item->read(APP_CONF_NAME, "Key", "UserFont", false);
+	zlbSettings->insertItem ( item,-1 );
+
+	item = new ZOptionItem(zlbSettings, ZOptionItem::EDIT_COLOR, 12);
+	item->setTitle(lng->getString("COLOR"));
+	item->read(APP_CONF_NAME, "Font", "PanelColor", "#000000");
+	zlbSettings->insertItem ( item,-1 );
 	#endif
 	
 	ZSoftKey *softKey  = new ZSoftKey(NULL, this, this);
-	setMainWidgetTitle(lng->getString("DLG_SETTING"));
-	softKey->setText ( ZSoftKey::LEFT, lng->getString("OK"), ( ZSoftKey::TEXT_PRIORITY ) 0 );
-	softKey->setText ( ZSoftKey::RIGHT, lng->getString("CANCEL"), ( ZSoftKey::TEXT_PRIORITY ) 0 );
-	softKey->setClickedSlot ( ZSoftKey::RIGHT, this, SLOT ( reject() ) );
+	softKey->setText( ZSoftKey::LEFT, lng->getString("OK"), ( ZSoftKey::TEXT_PRIORITY )0 );
+	softKey->setText( ZSoftKey::RIGHT, lng->getString("CANCEL"), ( ZSoftKey::TEXT_PRIORITY )0 );
 	softKey->setClickedSlot ( ZSoftKey::LEFT, this, SLOT ( accept() ) );
+	softKey->setClickedSlot ( ZSoftKey::RIGHT, this, SLOT ( reject() ) );
 	setSoftKey( softKey );
 	
 	toLog("ZSettingDlg: end");
@@ -164,31 +151,21 @@ ZAppSetting::~ZAppSetting()
 {
 }
 
-void ZAppSetting::accept()
+#ifdef AUTORUN
+inline QString getFullProgramDir()
 {
-	toLog("ZSettingDlg::save");
-	
-	#ifdef RAISE_PHONE
-	settings->cfg_SendReaisePhone = zcbSendReasePhone->isChecked();
-	settings->cfg_SendGoToIDLE = zcbSendGoToIDLE->isChecked();
-	#endif
-	settings->cfg_FiltrProc = !zcbFiltrProc->isChecked();
-	settings->cfg_ShowAppNoWindow = zcbTaskNoWin->isChecked();
-	settings->cfg_PanelFontSize = fontPanelSize;
-	settings->cfg_ListFontSize = fontSize; 
-	settings->cfg_Language = lng->getLngFileName( zcbLanguage->currentText() );
-    settings->cfg_GreenShowInfo = zcbKeyGrren->isChecked();
-    settings->cfg_CAction = zcbActionC->currentItem();
-	
-	settings->cfg_UserFont = zcbCustomFontColor->isChecked();
-	settings->cfg_TimeInCaption = zcbTimeInCaption->isChecked();
-	#ifdef CUTED_QT_AND_EZX
-	settings->cfg_FontColor = fontColor;
+	QString ProgDir = lng->ProgDir;
+	if ( ProgDir[0]=='.' )
+	#ifndef CUTED_QT_AND_EZX
+		ProgDir = QDir::current().absPath() + ProgDir.right(ProgDir.length()-1);
 	#else
-	settings->cfg_FontColor = zccFontColor->getColor();
+		ProgDir = QDir(QDir::currentDirPath()).absPath() + ProgDir.right(ProgDir.length()-1);	
 	#endif
-	
-	#ifdef AUTORUN
+	return ProgDir;
+}
+
+inline void ZAppSetting::addToAutorun()
+{
 	ZConfig registry( "/ezxlocal/download/appwrite/am/InstalledDB" );
 	if ( registry.readEntry(AUTORUN_APPID, "Name", "")!="zTaskManDaemon" )
 	{
@@ -210,7 +187,10 @@ void ZAppSetting::accept()
 	}
 	ZConfig config("/ezxlocal/download/appwrite/am/UserConfig");
 	QString sAutoRunApps = config.readEntry("AutoRun", "Apps");
-	if ( zcbDaemon->isChecked() )
+	
+	ZOptionItem *item = (ZOptionItem *)zlbSettings->item(0);
+	
+	if ( item->getNum() )
 	{
 		if ( sAutoRunApps.isEmpty() )
 			sAutoRunApps = AUTORUN_APPID;
@@ -226,74 +206,46 @@ void ZAppSetting::accept()
 	}
     config.writeEntry("AutoRun", "Apps", sAutoRunApps);
     config.flush();
-	#endif
-	
-	//write settings
-	settings->save();
-
-	MyBaseDlg::accept();
-}
-
-void ZAppSetting::reject()
-{
-	MyBaseDlg::reject();
-} 
-
-void ZAppSetting::changeFont()
-{
-	ZNumPickerDlg * dlg = new ZNumPickerDlg(2,this);
-	ZNumModule* num = dlg->getNumModule();
-	num->setMaxValue(25);
-	num->setMinValue(6);
-	num->setValue(fontSize);
-	if ( dlg->exec() == QDialog::Accepted )
-	{
-		fontSize = num->getValue();
-		zpbFontSize->setText( QString::number(fontSize) );
-	}
-	delete num;
-	delete dlg;
-}
-
-QString ZAppSetting::getFullProgramDir()
-{
-	QString ProgDir = lng->ProgDir;
-	if ( ProgDir[0]=='.' )
-	#ifndef CUTED_QT_AND_EZX
-		ProgDir = QDir::current().absPath() + ProgDir.right(ProgDir.length()-1);
-	#else
-		ProgDir = QDir(QDir::currentDirPath()).absPath() + ProgDir.right(ProgDir.length()-1);	
-	#endif
-	return ProgDir;
-}
-
-void ZAppSetting::changePanelFont()
-{
-	ZNumPickerDlg * dlg = new ZNumPickerDlg(2,this);
-	ZNumModule* num = dlg->getNumModule();
-	num->setMaxValue(30);
-	num->setMinValue(6);
-	num->setValue(fontPanelSize);
-	if ( dlg->exec() == QDialog::Accepted )
-	{
-		fontPanelSize = num->getValue();
-		zpbPanelFontSize->setText(QString::number(fontPanelSize));
-	}
-	delete num;
-	delete dlg;
-}
-
-#ifdef CUTED_QT
-void ZAppSetting::changeFontColor()
-{
-	ZColorPickerDlg * dlg = new ZColorPickerDlg(fontColor,NULL,0,this);
-	if ( dlg->exec() == QDialog::Accepted )
-	{
-		fontColor = dlg->getColor();;
-		zpbFontColor->setFontColor(fontColor);
-	}
-	delete dlg;
 }
 #else
-void ZAppSetting::changeFontColor(){};
+inline void ZAppSetting::addToAutorun() {};
 #endif
+
+void ZAppSetting::accept()
+{
+	toLog("ZSettingDlg::save");
+	
+	ZOptionItem *item;
+	
+	for ( int i=0; i<zlbSettings->count(); i++ )
+	{
+		item = (ZOptionItem *)zlbSettings->item(i);
+		if ( !item )
+			continue;
+		
+		switch (item->getId())
+		{
+		#ifdef AUTORUN
+		case 0:
+		{
+			addToAutorun();
+			break;
+		}
+		#endif
+		case 8:
+		{
+			ZConfig cfg(APP_CONF_NAME);
+			cfg.writeEntry("General", "Lng", lng->getLngFileName( item->getText() ));
+			cfg.flush();
+			
+			break;
+		}
+		default:
+			item->write();
+		}
+	}
+	
+	settings->reloadSettings();
+	
+	MyBaseDlg::accept();
+}

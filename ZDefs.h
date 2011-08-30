@@ -68,7 +68,7 @@
 #endif
 
 // User config / chenel
-#define appConf "/ezxlocal/download/appwrite/setup/pe_taskman.cfg"
+#define APP_CONF_NAME "/ezxlocal/download/appwrite/setup/pe_taskman.cfg"
 #define appConfName "/PE_zTaskMan.ru.cfg"
 
 #define ZTASKMAN_START "PE/zTaskMan/"

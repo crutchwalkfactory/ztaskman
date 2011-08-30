@@ -158,7 +158,7 @@ void ZAddAppDlg::accept()
 	#endif
 	int id = listitem->getReservedData();
 	
-	ZConfig cfg(appConf);
+	ZConfig cfg(APP_CONF_NAME);
 	
 	for (int i=0;i<20;i++)
 	{
@@ -179,11 +179,6 @@ void ZAddAppDlg::accept()
 	
 	MyBaseDlg::accept();
 }
-
-void ZAddAppDlg::reject()
-{
-	MyBaseDlg::reject();
-} 
 
 ZAddAppDlg::~ZAddAppDlg()
 {

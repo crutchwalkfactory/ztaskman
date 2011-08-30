@@ -13,75 +13,23 @@
 #define ZSETTINGDLG_H
 
 #include "BaseDlg.h"
-#include <ZCheckBox.h>
-#include <ZComboBox.h>
-#include <ZPressButton.h>
-#include <ZLabel.h>
-#include <ZNumPickerDlg.h>
-#if CUTED_QT_AND_EZX
-#include <ZColorPickerDlg.h>
-#else
-#include <ZColorControl.h>
-#endif
-
-#ifdef EZX_V8
-#include "ZNewCheckBox.h"
-#define ZCheckBox ZNewCheckBox
-#endif
+#include <ZListBox.h>
 
 class ZAppSetting : public MyBaseDlg 
 {
-  Q_OBJECT
+	Q_OBJECT
 
-  public:
-    ZAppSetting();
-    ~ZAppSetting();
+public:
+	ZAppSetting();
+	~ZAppSetting();
 
-    ZCheckBox *zcbFiltrProc;
-    ZCheckBox *zcbTaskNoWin;
-    
-    #ifdef RAISE_PHONE
-    ZCheckBox *zcbSendReasePhone;
-    ZCheckBox *zcbSendGoToIDLE;
-    #endif
-    
-    ZCheckBox *zcbKeyGrren; 
-    ZComboBox *zcbActionC;
+	ZListBox * zlbSettings;
 
-    ZLabel *zlLang;
-    ZComboBox *zcbLanguage;
-        
-    ZLabel *zlFont;	
-	ZPressButton *zpbFontSize;
-	
-    ZLabel *zlPanelFont;	
-	ZPressButton *zpbPanelFontSize;	
-	
-	#ifdef CUTED_QT_AND_EZX
-	ZPressButton *zpbFontColor;	
-	QColor fontColor;
-	#else
-	ZColorControl * zccFontColor;
-	#endif
-	
-	ZCheckBox *zcbCustomFontColor;
-	ZCheckBox *zcbTimeInCaption;
+public slots:
+	void accept();
 
-	#ifdef AUTORUN
-	ZCheckBox *zcbDaemon;
-	#endif	
-
-	int fontSize;
-	int fontPanelSize;	
-    
-  public slots:
-    virtual void accept();
-    virtual void reject();
-	void changeFont();
-	void changePanelFont();
-	void changeFontColor();
-	
-	QString getFullProgramDir();
+private:
+	inline void addToAutorun();
 };
 
 #endif

@@ -13,8 +13,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include <ZComboBox.h>
 #include <ZConfig.h>
+
+#include <qstringlist.h>
 
 class ZLng
 {
@@ -26,8 +27,8 @@ class ZLng
 		
 		QString ProgDir;
 
-		void loadLngFile(QString fname );
-		void getLngList(ZComboBox *list, QString cur);
+		void loadLngFile(QString fname);
+		int getLngList(QStringList *list);
 		QString getLngFileName(QString lname);
 		void autoLoadLng();
 		void loadLngFullNameFile(QString fname);
@@ -41,7 +42,7 @@ class ZLng
 };
 
 //ZAboutDlg
-#define LNG_VER "0.4.4"
+#define LNG_VER "0.4.5"
 //#define LNG_THANKS "Thanks to Abram, BeZ"
 #ifdef EZX_VE66
 #define LNG_THANKS   "Special build for PearlMod!"

@@ -56,7 +56,6 @@ public:
 	~ZSettings();
 	
 	void reloadSettings();
-	void save();
 	void loadAppDB();
 	
 	mapIconNativ mapIcon;

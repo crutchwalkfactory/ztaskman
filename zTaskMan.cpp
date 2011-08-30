@@ -569,7 +569,7 @@ void ZTaskMan::lbAppSel(int index)
 	} else
 	if (index > 1)
 	{
-		ZConfig cfg(appConf);
+		ZConfig cfg(APP_CONF_NAME);
 		
 		ZTaskItem* listitem = (ZTaskItem*)lbApp->item ( index ); 
 		int n = listitem->getReservedData();
@@ -726,7 +726,7 @@ void ZTaskMan::buildAppList()
 	
 	toLog("buildAppList: Read app list of config...");
 	
-	ZConfig cfg(appConf);
+	ZConfig cfg(APP_CONF_NAME);
 	
 	QString name;
 	QString ico;
@@ -902,7 +902,7 @@ void ZTaskMan::menu_appDel()
 	n = listitem->getReservedData();
 	
 	toLog("Del index = "+QString::number(n));
-	ZConfig cfg(appConf);
+	ZConfig cfg(APP_CONF_NAME);
 	
 	cfg.writeEntry("App", "name"+QString::number(n), "");
 	cfg.writeEntry("App", "run"+QString::number(n), "" );
@@ -927,7 +927,7 @@ void ZTaskMan::menu_appRen()
 	n = listitem->getReservedData();
 	
 	toLog("Ren index = "+QString::number(n));
-	ZConfig cfg(appConf);
+	ZConfig cfg(APP_CONF_NAME);
 	
 	ZSingleCaptureDlg * dlg = new ZSingleCaptureDlg("", lng->getString("DLG_REN"), ZSingleCaptureDlg::TypeLineEdit, this);
 	
@@ -1087,24 +1087,13 @@ void ZTaskMan::menu_appSetting()
 		
 		QFont font ( qApp->font() );
 		font.setPointSize ( settings->cfg_ListFontSize );
-		lbProc->setItemFont (ZListBox::LISTITEM_REGION_C, font, true );
-		lbProc->setItemFont (ZListBox::LISTITEM_REGION_C, font, false );
-		lbProc->setItemFont (ZListBox::LISTITEM_REGION_A, font, true );
-		lbProc->setItemFont (ZListBox::LISTITEM_REGION_A, font, false );
-		lbProc->setItemFont (ZListBox::LISTITEM_REGION_B, font, true );
-		lbProc->setItemFont (ZListBox::LISTITEM_REGION_B, font, false );			
-		lbApp->setItemFont (ZListBox::LISTITEM_REGION_C, font, true );
-		lbApp->setItemFont (ZListBox::LISTITEM_REGION_C, font, false );	
-		lbApp->setItemFont (ZListBox::LISTITEM_REGION_B, font, true );
-		lbApp->setItemFont (ZListBox::LISTITEM_REGION_B, font, false );	
-		lbApp->setItemFont (ZListBox::LISTITEM_REGION_A, font, true );
-		lbApp->setItemFont (ZListBox::LISTITEM_REGION_A, font, false );	
 		
-		font.setPointSize ( settings->cfg_PanelFontSize );
-		CPUFreq->setFont( font );
-		RAM->setFont( font );
-		SWAP->setFont( font );
-
+		lbProc->setItemFont( ZListBox::LISTITEM_REGION_A, ZListBox::StStandard, font );	
+		lbProc->setItemFont( ZListBox::LISTITEM_REGION_A, ZListBox::StHighlighted, font );	
+		lbApp->setItemFont( ZListBox::LISTITEM_REGION_A, ZListBox::StStandard, font );	
+		lbApp->setItemFont( ZListBox::LISTITEM_REGION_A, ZListBox::StHighlighted, font );	
+		
+		#ifndef NO_CHANGE_COLOR	
 		if ( settings->cfg_UserFont )
 		{	
 			CPUFreq->setFontColor(settings->cfg_FontColor);
@@ -1116,13 +1105,16 @@ void ZTaskMan::menu_appSetting()
 			CPUFreq->updateLabelSkin();
 			RAM->updateLabelSkin();
 			SWAP->updateLabelSkin();
-			#endif			
+			#endif		
 		}
 		
+		font.setPointSize ( settings->cfg_PanelFontSize );
+		CPUFreq->setFont( font );
+		RAM->setFont( font );
+		SWAP->setFont( font );		
+		#endif
+			
 		buildProcList();
-		
-		lbApp->clear();
-		buildAppList();
 		
 		lbProc->setFocus();
 	}

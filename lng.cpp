@@ -5,6 +5,8 @@
 
 #include <dirent.h>
 
+#include <qfile.h>
+
 ZLng::ZLng()
 {
 	CurLng = "";
@@ -40,14 +42,16 @@ void ZLng::loadLngFile(QString fname)
 	cLng = new ZConfig( fname );
 }
 
-void ZLng::getLngList(ZComboBox *list, QString cur)
+int ZLng::getLngList(QStringList *list)
 {
 	toLog("getLngList");
 	static DIR *dir;
 	struct dirent *entry;
 	char *name;
 	QString qname;
-	QString lang;		
+	QString lang;
+	
+	int NumCurLng=0;		
 
 	dir = opendir( ProgDir + "/lng");
 	if(!dir)
@@ -73,14 +77,18 @@ void ZLng::getLngList(ZComboBox *list, QString cur)
 				ZConfig cfg( QString( ProgDir + "/lng/"+ qname) );
 				lang = cfg.readEntry(QString("Info"), QString("LNG"), "-").utf8();
 				cfg.flush();
-				list->insertItem(QString::fromUtf8(lang),i);
-				if (qname==cur)
-					list->setCurrentItem(i);
-				++i;
+				list->append(QString::fromUtf8(lang));
+				
+				if (qname==CurLng)
+					NumCurLng = i;
+				
+				i++;
 			}
 		}	
 	}
 	toLog("getLngList: end");
+	
+	return NumCurLng;
 }
 
 QString ZLng::getLngFileName(QString lname)

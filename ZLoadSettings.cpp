@@ -212,8 +212,9 @@ void ZSettings::loadAppDB()
 
 void ZSettings::reloadSettings()
 {	
-	ZConfig cfg(appConf);
+	ZConfig cfg(APP_CONF_NAME);
 	
+    cfg_TimeInCaption = cfg.readBoolEntry(QString("General"), QString("TimeInCaption"), false); 	
 	#ifdef RAISE_PHONE
 	cfg_SendReaisePhone = cfg.readBoolEntry(QString("General"), QString("SendReaisePhone"), true);
 	cfg_SendGoToIDLE = cfg.readBoolEntry(QString("General"), QString("SendGoToIDLE"), false);
@@ -225,54 +226,18 @@ void ZSettings::reloadSettings()
 		lng->setCurrentLng( cfg_Language );
 	} else
 		lng->autoLoadLng();		
-	cfg_FiltrProc = cfg.readBoolEntry(QString("Task"), QString("FiltrProc"), true);
+	
+	cfg_FiltrProc = !cfg.readBoolEntry(QString("Task"), QString("ShowAllTask"), false);
 	cfg_HideProcList = cfg.readEntry(QString("Task"), QString("FiltrProcList"), QString(HIDE_PROCESS));
 	cfg_ShowAppNoWindow = cfg.readBoolEntry(QString("Task"), QString("ShowAppNoWindow"), false);
+	
 	cfg_PanelFontSize = cfg.readNumEntry(QString("Font"), QString("PanelFontSize"), 14);
-	#ifdef OLD_PLATFORM
-	cfg_ListFontSize = cfg.readNumEntry(QString("Font"), QString("ListFontSize"), 18);
-	#else
 	cfg_ListFontSize = cfg.readNumEntry(QString("Font"), QString("ListFontSize"), 16);	
-	#endif
+	cfg_FontColor.setNamedColor(cfg.readEntry("Font", "PanelColor", "#000000"));    
+	cfg_UserFont = cfg.readBoolEntry(QString("Font"), QString("UserFont"), false);	
+	
 	cfg_GreenShowInfo = cfg.readBoolEntry(QString("Key"), QString("ShowInfoByGreen"), true);
-    cfg_CAction = cfg.readNumEntry(QString("Key"), QString("ActionByC"), 0); 
-    
-    cfg_TimeInCaption = cfg.readBoolEntry(QString("General"), QString("TimeInCaption"), false); 
-
-	int r,g,b;
-	r = cfg.readNumEntry(QString("Font"), QString("PanelColor_R"), 0);
-	g = cfg.readNumEntry(QString("Font"), QString("PanelColor_G"), 0);
-	b = cfg.readNumEntry(QString("Font"), QString("PanelColor_B"), 0);
-	cfg_FontColor.setRgb(r,g,b);
-	
-	cfg_UserFont = cfg.readBoolEntry(QString("Font"), QString("UserFont"), false);
-}
-
-void ZSettings::save()
-{
-	qDebug("Save settings");
-	ZConfig cfg(appConf);
-	
-	cfg.writeEntry("Task", "FiltrProc", cfg_FiltrProc );
-	cfg.writeEntry("Task", "ShowAppNoWindow", cfg_ShowAppNoWindow );
-	cfg.writeEntry("Task", "FiltrProcList", cfg_HideProcList );
-	#ifdef RAISE_PHONE
-	cfg.writeEntry("General", "SendReaisePhone", cfg_SendReaisePhone );  
-	cfg.writeEntry("General", "SendGoToIDLE", cfg_SendGoToIDLE );
-	#endif
-	cfg.writeEntry("General", "Lng", cfg_Language );
-	cfg.writeEntry("Font", "ListFontSize", cfg_ListFontSize );
-	cfg.writeEntry("Font", "PanelFontSize", cfg_PanelFontSize );
-	cfg.writeEntry("Key", "ShowInfoByGreen", cfg_GreenShowInfo);
-    cfg.writeEntry("Key", "ActionByC", cfg_CAction);
-    cfg.writeEntry("General", "TimeInCaption", cfg_TimeInCaption);	
-    
-    cfg.writeEntry("Font", "UserFont", cfg_UserFont );
-	cfg.writeEntry("Font", "PanelColor_R", cfg_FontColor.red());
-	cfg.writeEntry("Font", "PanelColor_G", cfg_FontColor.green());
-	cfg.writeEntry("Font", "PanelColor_B", cfg_FontColor.blue());    
-	
-	cfg.flush();
+    cfg_CAction = cfg.readNumEntry(QString("Key"), QString("ActionOnC"), 0);
 }
 
 QString ZSettings::getProgramDir()

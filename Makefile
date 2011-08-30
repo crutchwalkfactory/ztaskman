@@ -25,7 +25,6 @@ UPLOAD_PATH :=  /ezxlocal/download/mystuff/.system/zTaskMan
 
 TOOLPREFIX := /arm-eabi
 ARMLIB     := $(TOOLPREFIX)/arm-linux-gnueabi/lib
-ZNEWCHECKBOX = 0
 
 ifeq ($(PLATFORM),)
 PLATFORM = EZX-Z6
@@ -45,7 +44,6 @@ EZXDIR	:=	$(TOOLPREFIX)/lib/ezx-v8
 LINKLIB := -lm -lqte-mt -lezxpm -lezxappbase 
 DIRECTIV := -DEZX_V8 -DFIX_STR_REPLACE -DFIX_FORMCONTAINER -DOLD_PLATFORM -DFIX_HEADER -DINDEX_CARD1 -DRAISE_PHONE
 TARGET	=       $(APPNAME)_V8
-ZNEWCHECKBOX = 1
 endif
 
 ifeq ($(PLATFORM),EZX-E8)
@@ -61,7 +59,6 @@ ifeq ($(PLATFORM),EZX-EM30)
 ARMLIB     := $(TOOLPREFIX)/arm-linux-gnueabi/lib_E8
 QTDIR	:=	$(TOOLPREFIX)/lib/qt-em30
 EZXDIR	:=	$(TOOLPREFIX)/lib/ezx-em30
-EZXDIR2	:=	$(TOOLPREFIX)/lib/ezx-e8
 LINKLIB := -lm -lqte-mt -lezxappbase
 DIRECTIV := -DEZX_EM30 -DFixByQT -DNEW_PLATFORM -DHARD_KEY_DAEMON -DRAISE_PHONE -DFLOWPLAYER -DGORIZONTAL_SCREEN
 TARGET	=       $(APPNAME)_EM30
@@ -79,7 +76,6 @@ endif
 ifeq ($(PLATFORM),EZX-U9)
 QTDIR	:=	$(TOOLPREFIX)/lib/qt-zn5
 EZXDIR	:=	$(TOOLPREFIX)/lib/ezx-u9
-EZXDIR2	:=	$(TOOLPREFIX)/lib/ezx-zn5
 LINKLIB := -lm -lqte-mt -lezxappbase
 DIRECTIV := -DEZX_U9 -DFixByQT -DFIX_FORMCONTAINER -DFIX_MENU_2 -DRAISE_PHONE -DCUTED_QT_AND_EZX
 TARGET	=       $(APPNAME)_U9
@@ -106,7 +102,7 @@ ARMLIB     := $(TOOLPREFIX)/arm-linux-gnueabi/lib_E8
 QTDIR	:=	$(TOOLPREFIX)/lib/qt-em35
 EZXDIR	:=	$(TOOLPREFIX)/lib/ezx-em35
 LINKLIB := -lm -lqte-mt -lezxappbase
-DIRECTIV := -DEZX_EM35 -DFixByQT -DNEW_PLATFORM -DES_EVENT -DNEW_JAVA_LIST -DHARD_KEY_DAEMON
+DIRECTIV := -DEZX_EM35 -DFixByQT -DNEW_PLATFORM -DES_EVENT -DNEW_JAVA_LIST -DHARD_KEY_DAEMON -DNO_CHANGE_COLOR
 TARGET	=       $(APPNAME)_EM35
 endif
 
@@ -115,7 +111,7 @@ ARMLIB     := $(TOOLPREFIX)/arm-linux-gnueabi/lib_E8
 QTDIR	:=	$(TOOLPREFIX)/lib/qt-em35
 EZXDIR	:=	$(TOOLPREFIX)/lib/ezx-ve66
 LINKLIB := -lm -lqte-mt -lezxappbase
-DIRECTIV := -DEZX_VE66 -DFixByQT -DNEW_PLATFORM -DES_EVENT -DNEW_JAVA_LIST -DHARD_KEY_DAEMON -DAUTORUN
+DIRECTIV := -DEZX_VE66 -DFixByQT -DNEW_PLATFORM -DES_EVENT -DNEW_JAVA_LIST -DHARD_KEY_DAEMON -DAUTORUN -DNO_CHANGE_COLOR
 #TARGET	=       $(APPNAME)_VE66
 TARGET	=       $(APPNAME)
 UPLOAD_PATH :=  /ezxlocal/download/mystuff/.system/zTaskMan
@@ -127,16 +123,16 @@ LD	    =	$(TOOLPREFIX)/bin/arm-linux-gnueabi-g++
 STRIP   =   $(TOOLPREFIX)/bin/arm-linux-strip
 CFLAGS	=	-pipe -Wall -W -O2 -DNO_DEBUG $(DIRECTIV) $(INCPATH) -march=armv6j -mtune=arm1136jf-s -Os $(FLAGS_CUSTOM)
 CXXFLAGS=	-pipe -DQWS -fno-exceptions -fno-rtti -Wall -W -DNO_DEBUG $(DIRECTIV) $(INCPATH) -march=armv6j -mtune=arm1136jf-s -Os $(FLAGS_CUSTOM) 
-INCPATH	=	-I$(QTDIR)/include -I$(EZXDIR)/include -I$(EZXDIR2)/include -I$(TOOLPREFIX)/arm-linux-gnueabi/include
+INCPATH	=	-I$(QTDIR)/include -I$(EZXDIR)/include -I$(TOOLPREFIX)/arm-linux-gnueabi/include
 LDFLAGS	=	-s
 LINK	=	$(TOOLPREFIX)/bin/arm-linux-gnueabi-gcc
 LFLAGS	=	-Wl,-rpath-link,$(EZXDIR)/lib $(FLAGS_CUSTOM)
-LIBS	=	$(SUBLIBS) -L$(EZXDIR)/lib -L$(EZXDIR2)/lib -L$(ARMLIB) -L$(QTDIR)/lib $(LINKLIB)
+LIBS	=	$(SUBLIBS) -L$(EZXDIR)/lib -L$(ARMLIB) -L$(QTDIR)/lib $(LINKLIB)
 MOC	    =	$(QTDIR)/bin/moc
 UIC	    =	$(QTDIR)/bin/uic
 
 ####### Files
-HEADERS0 =   zTaskMan.h\
+HEADERS =   zTaskMan.h\
             GUI_Define.h\
             BaseDlg.h\
             ZAboutDlg.h\
@@ -146,15 +142,10 @@ HEADERS0 =   zTaskMan.h\
             lng.h\
             ZTaskItem.h\
             ZLoadSettings.h\
-            ZNumSelect.h
-ifeq ($(ZNEWCHECKBOX),1)
-HEADERS =   $(HEADERS0)\
-            ZNewCheckBox.h
-else
-HEADERS =   $(HEADERS0)
-endif
+            ZNumSelect.h\
+            ZOptionItem.h
 	        
-SOURCES0 =   main.cpp\
+SOURCES =   main.cpp\
             zTaskMan.cpp\
             BaseDlg.cpp\
             ZAboutDlg.cpp\
@@ -165,15 +156,10 @@ SOURCES0 =   main.cpp\
             ZTaskItem.cpp\
             ZLoadSettings.cpp\
             ZNumSelect.cpp\
-            ZUtils.cpp
-ifeq ($(ZNEWCHECKBOX),1)
-SOURCES =   $(SOURCES0)\
-            ZNewCheckBox.cpp
-else
-SOURCES =   $(SOURCES0)
-endif
+            ZUtils.cpp\
+            ZOptionItem.cpp
 
-OBJECTS0 =   main.o zTaskMan.o\
+OBJECTS =   main.o zTaskMan.o\
             BaseDlg.o\
             ZAboutDlg.o\
             ZProcInfo.o\
@@ -183,49 +169,30 @@ OBJECTS0 =   main.o zTaskMan.o\
             ZTaskItem.o\
             ZLoadSettings.o\
             ZNumSelect.o\
-            ZUtils.o
-ifeq ($(ZNEWCHECKBOX),1)
-OBJECTS =   $(OBJECTS0)\
-            ZNewCheckBox.o
-else
-OBJECTS =   $(OBJECTS0)
-endif
+            ZUtils.o\
+            ZOptionItem.o
 
-SRCMOC0	=	moc_zTaskMan.cpp\
+SRCMOC	=	moc_zTaskMan.cpp\
           moc_BaseDlg.cpp\
           moc_ZAboutDlg.cpp\
           moc_ZProcInfo.cpp\
           moc_ZSettingDlg.cpp\
           moc_ZAddApp.cpp\
-          moc_lng.cpp\
           moc_ZTaskItem.cpp\
           moc_ZLoadSettings.cpp\
           moc_ZNumSelect.cpp\
-          moc_ZUtils.cpp
-ifeq ($(ZNEWCHECKBOX),1)
-SRCMOC =   $(SRCMOC0)\
-            moc_ZNewCheckBox.h
-else
-SRCMOC =   $(SRCMOC0)
-endif
+          moc_ZOptionItem.cpp
 
-OBJMOC0	=	moc_zTaskMan.o\
+OBJMOC	=	moc_zTaskMan.o\
           moc_BaseDlg.o\
           moc_ZAboutDlg.o\
           moc_ZProcInfo.o\
           moc_ZSettingDlg.o\
           moc_ZAddApp.o\
-          moc_lng.o\
           moc_ZTaskItem.o\
           moc_ZLoadSettings.o\
           moc_ZNumSelect.o\
-          moc_ZUtils.o
-ifeq ($(ZNEWCHECKBOX),1)
-OBJMOC =   $(OBJMOC0)\
-            moc_ZNewCheckBox.o
-else
-OBJMOC =   $(OBJMOC0)
-endif
+          moc_ZOptionItem.o
             
 TARGETS = 	$(TARGET)
 INTERFACE_DECL_PATH = .
@@ -252,7 +219,7 @@ up:
 moc_zTaskMan.o: moc_zTaskMan.cpp zTaskMan.h
 moc_zTaskMan.cpp: zTaskMan.h
 	$(MOC) zTaskMan.h -o moc_zTaskMan.cpp
-  
+
 moc_BaseDlg.o: moc_BaseDlg.cpp BaseDlg.h
 moc_BaseDlg.cpp: BaseDlg.h
 	$(MOC) BaseDlg.h -o moc_BaseDlg.cpp
@@ -260,45 +227,35 @@ moc_BaseDlg.cpp: BaseDlg.h
 moc_ZAboutDlg.o: moc_ZAboutDlg.cpp ZAboutDlg.h
 moc_ZAboutDlg.cpp: ZAboutDlg.h
 	$(MOC) ZAboutDlg.h -o moc_ZAboutDlg.cpp
-	
+
 moc_ZProcInfo.o: moc_ZProcInfo.cpp ZProcInfo.h
 moc_ZProcInfo.cpp: ZProcInfo.h
 	$(MOC) ZProcInfo.h -o moc_ZProcInfo.cpp
-	
+
 moc_ZSettingDlg.o: moc_ZSettingDlg.cpp ZSettingDlg.h
 moc_ZSettingDlg.cpp: ZSettingDlg.h
 	$(MOC) ZSettingDlg.h -o moc_ZSettingDlg.cpp	
-	
+
 moc_ZAddApp.o: moc_ZAddApp.cpp ZAddApp.h
 moc_ZAddApp.cpp: ZAddApp.h
 	$(MOC) ZAddApp.h -o moc_ZAddApp.cpp	
-		
-moc_lng.o: moc_lng.cpp lng.h
-moc_lng.cpp: lng.h
-	$(MOC) lng.h -o moc_lng.cpp	
 
 moc_ZTaskItem.o: moc_ZTaskItem.cpp ZTaskItem.h
 moc_ZTaskItem.cpp: ZTaskItem.h
 	$(MOC) ZTaskItem.h -o moc_ZTaskItem.cpp
-		
+
 moc_ZLoadSettings.o: moc_ZLoadSettings.cpp ZLoadSettings.h
 moc_ZLoadSettings.cpp: ZLoadSettings.h
 	$(MOC) ZLoadSettings.h -o moc_ZLoadSettings.cpp		
-	
+
 moc_ZNumSelect.o: moc_ZNumSelect.cpp ZNumSelect.h
 moc_ZNumSelect.cpp: ZNumSelect.h
 	$(MOC) ZNumSelect.h -o moc_ZNumSelect.cpp		
 
-moc_ZUtils.o: moc_ZNumSelect.cpp ZNumSelect.h
-moc_ZUtils.cpp: ZUtils.cpp
-	$(MOC) ZUtils.cpp -o moc_ZUtils.cpp
+moc_ZOptionItem.o: moc_ZOptionItem.cpp ZOptionItem.h
+moc_ZOptionItem.cpp: ZOptionItem.h
+	$(MOC) ZOptionItem.h -o moc_ZOptionItem.cpp
 
-ifeq ($(ZNEWCHECKBOX),1)
-moc_ZNewCheckBox.o: moc_ZNewCheckBox.cpp ZNewCheckBox.h
-moc_ZNewCheckBox.cpp: ZNewCheckBox.h
-	$(MOC) ZNewCheckBox.h -o moc_ZNewCheckBox.cpp
-endif
-			
 #----------------------------------------------
 install: $(TARGET)
 	ncftpput -u root -p "" 192.168.16.2 $(UPLOAD_PATH) $(TARGET)

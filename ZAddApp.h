@@ -46,8 +46,7 @@ class ZAddAppDlg : public MyBaseDlg {
 	void procReg(QString FileRegistry);
       
   public slots:
-    virtual void accept();
-    virtual void reject();   
+    virtual void accept(); 
 };
 
 #endif
